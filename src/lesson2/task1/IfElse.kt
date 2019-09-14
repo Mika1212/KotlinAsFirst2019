@@ -5,6 +5,7 @@ package lesson2.task1
 import lesson1.task1.discriminant
 import kotlin.math.abs
 import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.sqrt
 
 /**
@@ -167,9 +168,24 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    return if (a + b < c || a + c < b || c + b < a) -1
-    else if (a * a + b * b > c * c || a * a + c * c > b * b || a * a < b * b + c * c) 0
-    else if (a * a + b * b == c * c || a * a + c * c == b * b || a * a == b * b + c * c) 1
+    var a1 = max(a, b)
+    var a2 = max(b, c)
+    var a3 = max(a, c)
+    if (a1 == a2) {
+        a1 = b
+        a2 = a3
+        a3 = min(a, c)
+    } else if (a2 == a3) {
+        a2 = a1
+        a1 = c
+        a3 = min(a, b)
+    } else if (a1 == a3) {
+        a1 = a
+        a3 = min(c, b)
+    }
+    return if (a2 + a3 < a1) -1
+    else if (a2 * a2 + a3 * a3 > a1 * a1) 0
+    else if (a2 * a2 + a3 * a3 == a1 * a1) 1
     else 2
 }
 
@@ -181,4 +197,7 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
+    var x1= min(a,c)
+    var x2=min(a,)
+}
