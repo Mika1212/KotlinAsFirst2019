@@ -198,14 +198,14 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    var long=0
+    var long = 0
 
-    if (b<c ||a>d) long=-1
-    else if (b==c ||a==d) long=0
-    else if (a<=c && b<=d) long = b-c
-    else if (a<=c && d<=b) long = d-c
-    else if (a>=c && d<=b) long = d-a
-    else if (a>=c && d>=b) long = b-a
+    if (b < c || a > d) long = -1
+    else if (b == c || a == d) long = 0
+    else if (a <= c && b <= d) long = b - c
+    else if (a <= c && d <= b) long = d - c
+    else if (a >= c && d <= b) long = d - a
+    else if (a >= c && d >= b) long = b - a
     return long
 }
 
