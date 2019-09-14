@@ -199,16 +199,12 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     var long=0
-    var x1= min(a,c)
-    var x2=min(a,d)
-    if (x1==x2 && b>d) x2=b
-    else x2=c
-    if (a==c && d<a || b==c && d>b) long = 0
-    else if (x1==c && d>b) long = b-a
-    else if (x1==c && d<b) long= b-a
-    else if (x2==a && d>a) long=d-a
-    else if (x2==b) long=d-c
-    else if (x2==c && d>b) long=b-c
-    else long=-1
+
+    if (b<c ||a>d) long=-1
+    else if (b==c ||a==d) long=0
+    else if (a<=c && b<=d) long = b-c
+    else if (a<=c && d<=b) long = d-c
+    else if (a>=c && d<=b) long = d-a
+    else if (a>=c && d>=b) long = b-a
     return long
 }
