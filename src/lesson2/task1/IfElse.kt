@@ -203,7 +203,10 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     var x2=min(a,d)
     if (x1==x2 && b>d) x2=b
     else x2=c
-    if (x2==a) long=d-a
+    if (a==c && d<a || b==c && d>b) long = 0
+    else if (x1==c && d>b) long = b-a
+    else if (x1==c && d<b) long= b-a
+    else if (x2==a && d>a) long=d-a
     else if (x2==b) long=d-c
     else if (x2==c && d>b) long=b-c
     else long=-1
