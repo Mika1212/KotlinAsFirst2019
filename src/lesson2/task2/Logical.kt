@@ -65,10 +65,10 @@ fun circleInside(
     x2: Double, y2: Double, r2: Double
 ): Boolean {
     return if (x1 == x2 && y1 == y2 && x2 + r2 >= x1 + r1 && y2 + r2 >= y1 + r1) true
-    else if (x1 > x2 && y1 > y2 && x2 + r2 >= x1 + r1 && y2 + r2 >= y1 + r1) true
-    else if (x1 < x2 && y1 < y2 && x2 - r2 <= x1 - r1 && y2 - r2 <= y1 - r1) true
-    else if (x1 < x2 && y1 > y2 && x2 - r2 <= x1 - r1 && y2 + r2 >= y1 + r1) true
-    else if (x1 > x2 && y1 < y2 && x2 + r2 >= x1 + r1 && y2 - r2 <= y1 - r1) true
+    else if (x1 >= x2 && y1 >= y2 && x2 + r2 > x1 + r1 && y2 + r2 > y1 + r1) true
+    else if (x1 <= x2 && y1 <= y2 && x2 - r2 < x1 - r1 && y2 - r2 < y1 - r1) true
+    else if (x1 <= x2 && y1 >= y2 && x2 - r2 <= x1 - r1 && y2 + r2 >= y1 + r1) true
+    else if (x1 >= x2 && y1 <= y2 && x2 + r2 > x1 + r1 && y2 - r2 < y1 - r1) true
     else false
 }
 
