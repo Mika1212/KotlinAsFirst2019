@@ -70,18 +70,18 @@ fun ageDescription(age: Int): String {
     if (age > 100 && age < 121) {
         b = age % 100
     }
-           return when {
-           b == 1 -> "$age год"
-           b == 2 -> "$age года"
-           b == 3 -> "$age года"
-           b == 4 -> "$age года"
-           b >=5 && b<=20 -> "$age лет"
-               b%10 == 1 -> "$age год"
-               b%10 == 2 -> "$age года"
-               b%10 == 3 -> "$age года"
-               b%10 == 4 -> "$age года"
-               else -> "$age лет"
-        }
+    return when {
+        b == 1 -> "$age год"
+        b == 2 -> "$age года"
+        b == 3 -> "$age года"
+        b == 4 -> "$age года"
+        b >= 5 && b <= 20 -> "$age лет"
+        b % 10 == 1 -> "$age год"
+        b % 10 == 2 -> "$age года"
+        b % 10 == 3 -> "$age года"
+        b % 10 == 4 -> "$age года"
+        else -> "$age лет"
+    }
 }
 
 /*fun main() {
@@ -101,13 +101,12 @@ fun timeForHalfWay(
     t3: Double, v3: Double
 ): Double {
     val s = v1 * t1 + v2 * t2 + v3 * t3
-    var t0: Double = 0.0
-    when {
-        v1 * t1 > s / 2 -> t0 = s / 2 / v1
-        v1 * t1 + v2 * t2 > s / 2 -> t0 = (s / 2 - v1 * t1) / v2 + t1
-        v1 * t1 + v2 * t2 + v3 * t3 > s / 2 -> t0 = (s / 2 - v1 * t1 - v2 * t2) / v3 + t1 + t2
-    }
-    return t0
+     when {
+        v1 * t1 > s / 2 -> return s / 2 / v1
+        v1 * t1 + v2 * t2 > s / 2 -> return (s / 2 - v1 * t1) / v2 + t1
+        v1 * t1 + v2 * t2 + v3 * t3 > s / 2 -> return (s / 2 - v1 * t1 - v2 * t2) / v3 + t1 + t2
+        }
+
 }
 
 
