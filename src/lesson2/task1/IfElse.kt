@@ -101,11 +101,12 @@ fun timeForHalfWay(
     t3: Double, v3: Double
 ): Double {
     val s = v1 * t1 + v2 * t2 + v3 * t3
-     when {
+    when {
         v1 * t1 > s / 2 -> return s / 2 / v1
         v1 * t1 + v2 * t2 > s / 2 -> return (s / 2 - v1 * t1) / v2 + t1
         v1 * t1 + v2 * t2 + v3 * t3 > s / 2 -> return (s / 2 - v1 * t1 - v2 * t2) / v3 + t1 + t2
-        }
+        else -> return 0.0
+    }
 
 }
 
@@ -125,8 +126,8 @@ fun whichRookThreatens(
     rookX2: Int, rookY2: Int
 ): Int {
     var b = 0
-    if (kingX == rookX1 || kingY == rookY1) b = b + 1
-    if (kingX == rookX2 || kingY == rookY2) b = b + 2
+    if (kingX == rookX1 || kingY == rookY1) b += 1
+    if (kingX == rookX2 || kingY == rookY2) b += 2
     return if (b == 1) 1 else if (b == 2) 2 else if (b == 3) 3 else 0
 }
 
@@ -146,8 +147,8 @@ fun rookOrBishopThreatens(
     bishopX: Int, bishopY: Int
 ): Int {
     var b = 0
-    if (kingX == rookX || kingY == rookY) b = b + 1
-    if (abs(kingX - bishopX) == abs(kingY - bishopY)) b = b + 2
+    if (kingX == rookX || kingY == rookY) b += 1
+    if (abs(kingX - bishopX) == abs(kingY - bishopY)) b += 2
     return if (b == 1) 1 else if (b == 2) 2 else if (b == 3) 3 else 0
 }
 
@@ -160,25 +161,15 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    var a1 = max(a, b)
-    var a2 = max(b, c)
-    var a3 = max(a, c)
-    if (a1 == a2) {
-        a1 = b
-        a2 = a3
-        a3 = min(a, c)
-    } else if (a2 == a3) {
-        a2 = a1
-        a1 = c
-        a3 = min(a, b)
-    } else if (a1 == a3) {
-        a1 = a
-        a3 = min(c, b)
+    val a1 = maxOf(a, b, c)
+    val a2 = minOf(a, b, c)
+    val a3 = if (a1 == a && a2 == b || a1 == b && a2 == a) c else if (a1 == c && a2 == b || a1 == b && a2 == c) a else b
+    return when {
+        a2 + a3 < a1 -> -1
+        a2 * a2 + a3 * a3 > a1 * a1 -> 0
+        a2 * a2 + a3 * a3 == a1 * a1 -> 1
+        else -> 2
     }
-    return if (a2 + a3 < a1) -1
-    else if (a2 * a2 + a3 * a3 > a1 * a1) 0
-    else if (a2 * a2 + a3 * a3 == a1 * a1) 1
-    else 2
 }
 
 /**
@@ -190,14 +181,12 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    var long = 0
-
-    if (b < c || a > d) long = -1
-    else if (b == c || a == d) long = 0
-    else if (a <= c && b <= d) long = b - c
-    else if (a <= c && d <= b) long = d - c
-    else if (a >= c && d <= b) long = d - a
-    else if (a >= c && d >= b) long = b - a
-    return long
+    val a1=max(a,c)
+    val a2= min(b,d)
+    return when {
+        (b < c || a > d) -> -1
+        (b == c || a == d) -> 0
+        else -> a2-a1
+    }
 }
 
