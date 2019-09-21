@@ -70,25 +70,18 @@ fun ageDescription(age: Int): String {
     if (age > 100 && age < 121) {
         b = age % 100
     }
-    return (if (b < 21) {
-        return when (b) {
-            1 -> "$age год"
-            2 -> "$age года"
-            3 -> "$age года"
-            4 -> "$age года"
-            else -> "$age лет"
+           return when {
+           b == 1 -> "$age год"
+           b == 2 -> "$age года"
+           b == 3 -> "$age года"
+           b == 4 -> "$age года"
+           b >=5 && b<=20 -> "$age лет"
+               b%10 == 1 -> "$age год"
+               b%10 == 2 -> "$age года"
+               b%10 == 3 -> "$age года"
+               b%10 == 4 -> "$age года"
+               else -> "$age лет"
         }
-    } else
-        if (age < 101 || age > 120 && age < 201) {
-            b = age % 10
-            when (b) {
-                1 -> "$age год"
-                2 -> "$age года"
-                3 -> "$age года"
-                4 -> "$age года"
-                else -> "$age лет"
-            }
-        } else return "превышает допустимые значения")
 }
 
 /*fun main() {

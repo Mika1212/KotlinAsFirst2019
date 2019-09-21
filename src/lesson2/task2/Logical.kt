@@ -4,6 +4,8 @@ package lesson2.task2
 
 import lesson1.task1.sqr
 import kotlin.math.abs
+import kotlin.math.min
+import kotlin.math.sqrt
 
 /**
  * Пример
@@ -69,12 +71,11 @@ fun circleInside(
     x1: Double, y1: Double, r1: Double,
     x2: Double, y2: Double, r2: Double
 ): Boolean {
-    return if (x1 == x2 && y1 == y2 && x2 + r2 >= x1 + r1 && y2 + r2 >= y1 + r1) true
-    else if (x1 >= x2 && y1 >= y2 && x2 + r2 >= x1 + r1 && y2 + r2 >= y1 + r1) true
-    else if (x1 <= x2 && y1 <= y2 && x2 - r2 <= x1 - r1 && y2 - r2 <= y1 - r1) true
-    else if (x1 <= x2 && y1 >= y2 && x2 - r2 <= x1 - r1 && y2 + r2 >= y1 + r1) true
-    else if (x1 >= x2 && y1 <= y2 && x2 + r2 >= x1 + r1 && y2 - r2 <= y1 - r1) true
-    else false
+    val R1 = r2-sqrt(sqr(x2-x1) + sqr(y2-y1))
+    if (R1>=r1)
+        return true
+    else
+       return false
 }
 
 /**
@@ -87,6 +88,10 @@ fun circleInside(
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    return if (r >= a && s >= b || r >= a && s >= c || r >= b && s >= c || s >= a && r >= b || s >= a && r >= c || s >= b && r >= c) true
-    else false
-}
+    val a1= minOf(a,b,c)
+    val a2 = if (a1 == a) min(b,c) else if (a1==b) min(a,c) else min(a,b)
+    if (a1<=r && a2<=s || a1<=s && a2<=r)
+        return true
+    else
+            return false
+    }
