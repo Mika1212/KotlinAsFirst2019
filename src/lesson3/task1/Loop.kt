@@ -2,6 +2,7 @@
 
 package lesson3.task1
 
+import kotlin.math.max
 import kotlin.math.sqrt
 
 /**
@@ -67,7 +68,15 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun digitNumber(n: Int): Int = TODO()
+fun digitNumber(n: Int): Int {
+    var n1 = n
+    var count = if (n1 == 0) 1 else 0
+    while (n1 > 0) {
+        count++
+        n1 /= 10
+    }
+    return count
+}
 
 /**
  * Простая
@@ -75,7 +84,19 @@ fun digitNumber(n: Int): Int = TODO()
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
+fun fib(n: Int): Int {
+    var n1 = n
+    var f1 = 0
+    var f2 = 1
+    var a = 0
+    while (n1 - 1 > 0) {
+        a = f2
+        f2 = f2 + f1
+        f1 = a
+        n1 -= 1
+    }
+    return f2
+}
 
 /**
  * Простая
@@ -83,8 +104,69 @@ fun fib(n: Int): Int = TODO()
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int = TODO()
-
+fun lcm(m: Int, n: Int): Int {
+    var k = 1
+    var a2 = 0
+    var b2 = 0
+    var a3 = 0
+    var b3 = 0
+    var a5 = 0
+    var b5 = 0
+    var a7 = 0
+    var b7 = 0
+    var m1 = m
+    var n1 = n
+    if (n1 == m1)
+        return m1
+    else {
+        while (m1 %2 == 0 || n1 %2== 0) {
+            if (m % 2 == 0) {
+                a2 += 1
+                m1 /= 2
+            }
+            if (n % 2 == 0) {
+                b2 += 1
+                n1 /= 2
+            }
+        }
+        if (a2 > 0 || b2 > 0) k *= max(a2, b2) * 2
+        while (m1 %3 == 0 || n1 %3== 0) {
+            if (m % 3 == 0) {
+                a3 += 1
+                m1 /= 3
+            }
+            if (n % 3 == 0) {
+                b3 += 1
+                n1 /= 3
+            }
+        }
+        if (a3 > 0 || b3 > 0) k *= max(a3, b3) * 3
+        while (m1 %5 == 0 || n1 %5==0) {
+            if (m % 5 == 0) {
+                a5 += 1
+                m1 /= 5
+            }
+            if (n % 5 == 0) {
+                b5 += 1
+                n1 /= 5
+            }
+        }
+        if (a5 > 0 || b5 > 0) k *= max(a5, b5) * 5
+        while (m1 %7==  0 || n1 %7== 0) {
+            if (m % 7 == 0) {
+                a7 += 1
+                m1 /= 7
+            }
+            if (n % 7 == 0) {
+                b7 += 1
+                n1 /= 7
+            }
+        }
+        if (a7 > 0 || b7 > 0) k *= max(a7, b7) * 7
+        k *= n1 * m1
+        return k
+    }
+}
 /**
  * Простая
  *
