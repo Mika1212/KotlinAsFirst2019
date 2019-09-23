@@ -2,7 +2,16 @@
 
 package lesson3.task1
 
+
+import lesson1.task1.sqr
+import java.lang.Math.pow
 import kotlin.math.*
+
+
+private val Double.kotlin: Any
+    get() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
 /**
  * Пример
@@ -245,12 +254,18 @@ fun isCoPrime(m: Int, n: Int): Boolean {
 fun squareBetweenExists(m: Int, n: Int): Boolean {
     var m1 = 0.0
     var n1 = 0.0
+    var m2 = 0.0
+    var n2 = 0.0
     m1 = sqrt(m.toDouble())
     n1 = sqrt(n.toDouble())
-    floor(m1)
-    floor(n1)
+    m2 = m.toDouble()
+    n2 = n.toDouble()
+    m1 = floor(m1)
+    n1 = floor(n1)
     when {
         m == n -> return true
+        m2 == sqr(m1) -> return true
+        n2 == sqr(n1) -> return true
         abs(n1 - m1) > 0 -> return true
         else -> return false
     }
@@ -272,7 +287,17 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int = TODO()
+fun collatzSteps(x: Int): Int {
+    var f=x
+    var k = 0
+    while (f!=1) {
+        if (f%2==0) f=f/2
+        else
+            f=3*f+1
+        k+=1
+    }
+return k
+}
 
 /**
  * Средняя
@@ -283,7 +308,24 @@ fun collatzSteps(x: Int): Int = TODO()
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
-fun sin(x: Double, eps: Double): Double = TODO()
+fun sin(x: Double, eps: Double): Double {
+    var a = 1.0
+    var y = x
+    var n = 3.0
+    var k=1
+    if (x==0.0) return 0.0
+    while (abs(a) >= eps) {
+        a = pow(x,n)/ factorial(n.toInt()).toInt()
+        if (k%2==1) y -= a
+        else y += a
+        k+=1
+        n+=2
+    }
+    return y
+}
+
+
+
 
 /**
  * Средняя
@@ -294,7 +336,19 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+fun cos(x: Double, eps: Double): Double {
+    var a = 1.0
+    var y = 1.0
+    var n = 2.0
+    var k=1
+    while (abs(a) >= eps) {
+        a = pow(x,n)/ factorial(n.toInt()).toInt()
+        if (k%2==1) y -= a
+        else y += a
+        k+=1
+    }
+    return y
+}
 
 /**
  * Средняя
@@ -303,7 +357,23 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var n1=n
+    var k = 0
+    var result = 0
+    var j=0
+    while (n1>0){
+        n1/=10
+        k+=1
+    }
+    n1 = n
+    while (n1>0) {
+        result+=n1%10*pow(10.toDouble(),(k-j).toDouble()).toInt()
+        j+=1
+        n1/=10
+    }
+return result
+}
 
 /**
  * Средняя
