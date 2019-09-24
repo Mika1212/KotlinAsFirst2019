@@ -3,6 +3,8 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import lesson2.task2.medianOf
+import lesson2.task2.medianOfD
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -168,7 +170,7 @@ fun rookOrBishopThreatens(
 fun triangleKind(a: Double, b: Double, c: Double): Int {
     val a1 = maxOf(a, b, c)
     val a2 = minOf(a, b, c)
-    val a3 = if (a1 == a && a2 == b || a1 == b && a2 == a) c else if (a1 == c && a2 == b || a1 == b && a2 == c) a else b
+    val a3 = medianOfD(a,b,c)
     return when {
         a2 + a3 < a1 -> -1
         a2 * a2 + a3 * a3 > a1 * a1 -> 0

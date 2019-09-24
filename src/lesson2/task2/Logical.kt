@@ -7,6 +7,16 @@ import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.sqrt
 
+fun medianOfI(a: Int, b: Int, c: Int): Int {
+    val a1 = minOf(a, b, c)
+    return if (a1 == a) min(b, c) else if (a1 == b) min(a, c) else min(a, b)
+}
+
+fun medianOfD(a: Double, b: Double, c: Double): Double {
+    val a1 = minOf(a, b, c)
+    return if (a1 == a) min(b, c) else if (a1 == b) min(a, c) else min(a, b)
+}
+
 /**
  * Пример
  *
@@ -22,10 +32,7 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
 fun isNumberHappy(number: Int): Boolean {
-    if (number / 10 % 10 + number % 10 == number / 100 % 10 + number / 1000)
-        return true
-    else
-        return false
+    return number / 10 % 10 + number % 10 == number / 100 % 10 + number / 1000
 }
 
 /**
@@ -36,12 +43,13 @@ fun isNumberHappy(number: Int): Boolean {
  * Считать, что ферзи не могут загораживать друг друга.
  */
 fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
-    if (x1 == x2 || y1 == y2 || abs(x1 - x2) == abs(y1 - y2))
-        return true
-    else
-        return false
+    return when {
+        x1 == x2 -> true
+        y1 == y2 -> true
+        abs(x1 - x2) == abs(y1 - y2) -> true
+        else -> false
+    }
 }
-
 
 /**
  * Простая
@@ -50,14 +58,14 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
 fun daysInMonth(month: Int, year: Int): Int {
-    var b = if (year % 400 == 0 || year % 4 == 0 && year % 100 > 0)  29
+    val b = if (year % 400 == 0 || year % 4 == 0 && year % 100 > 0) 29
     else 28
-    return (when (month) {
+    return when (month) {
         1, 3, 5, 7, 8, 10, 12 -> 31
         4, 6, 9, 11 -> 30
         else -> b
     }
-            )
+
 }
 
 /**
@@ -71,11 +79,8 @@ fun circleInside(
     x1: Double, y1: Double, r1: Double,
     x2: Double, y2: Double, r2: Double
 ): Boolean {
-    val R1 = r2-sqrt(sqr(x2-x1) + sqr(y2-y1))
-    if (R1>=r1)
-        return true
-    else
-       return false
+    val z1 = r2 - sqrt(sqr(x2 - x1) + sqr(y2 - y1))
+    return z1 >= r1
 }
 
 /**
@@ -88,10 +93,13 @@ fun circleInside(
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    val a1= minOf(a,b,c)
-    val a2 = if (a1 == a) min(b,c) else if (a1==b) min(a,c) else min(a,b)
-    if (a1<=r && a2<=s || a1<=s && a2<=r)
-        return true
-    else
-            return false
+    val a1 = minOf(a, b, c)
+    val a2 = medianOfI(a, b, c)
+    return when {
+        a1 <= r -> true
+        a2 <= s -> true
+        a1 <= s -> true
+        a2 <= r -> true
+        else -> false
     }
+}
