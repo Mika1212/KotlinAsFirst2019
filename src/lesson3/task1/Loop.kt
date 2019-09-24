@@ -391,6 +391,7 @@ fun isPalindrome(n: Int): Boolean {
     var k = 0
     var k1 = 0
     var j = 0
+    if (n==0) return true
     while (n1 > 0) {
         n1 /= 10
         k++
@@ -414,7 +415,26 @@ fun isPalindrome(n: Int): Boolean {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var x=n%10
+    var k=1
+    var n1=n
+    var j=0
+    while (n1>0) {
+        n1 /= 10
+        j++
+    }
+    if (n==0) return false
+    if (j==1) return false
+    n1=n
+    while (n1>0){
+        n1/=10
+        if (n1%10 == x) k++
+        else break
+    }
+    if (j==k) return false
+    else return true
+}
 
 /**
  * Сложная
