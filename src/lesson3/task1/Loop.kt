@@ -288,15 +288,15 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  * этого для какого-либо начального X > 0.
  */
 fun collatzSteps(x: Int): Int {
-    var f=x
+    var f = x
     var k = 0
-    while (f!=1) {
-        if (f%2==0) f=f/2
+    while (f != 1) {
+        if (f % 2 == 0) f = f / 2
         else
-            f=3*f+1
-        k+=1
+            f = 3 * f + 1
+        k += 1
     }
-return k
+    return k
 }
 
 /**
@@ -309,22 +309,21 @@ return k
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
 fun sin(x: Double, eps: Double): Double {
-    var a = 1.0
+    var a = 100.0
     var y = x
     var n = 3.0
-    var k=1
-    if (x==0.0) return 0.0
+    var k = 1
+    if (x == 0.0) return 0.0
+    if (x / PI % 2 == 0.0) return 0.0
     while (abs(a) >= eps) {
-        a = pow(x,n)/ factorial(n.toInt()).toInt()
-        if (k%2==1) y -= a
+        a = pow(x, n) / factorial(n.toInt())
+        if (k % 2 == 1) y -= a
         else y += a
-        k+=1
-        n+=2
+        k += 1
+        n += 2
     }
     return y
 }
-
-
 
 
 /**
@@ -337,15 +336,18 @@ fun sin(x: Double, eps: Double): Double {
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double {
-    var a = 1.0
+    var a = 100.0
     var y = 1.0
     var n = 2.0
-    var k=1
+    var k = 1
+    if (x == 0.0) return 1.0
+    if (x / PI % 2 == 0.0) return 1.0
     while (abs(a) >= eps) {
-        a = pow(x,n)/ factorial(n.toInt()).toInt()
-        if (k%2==1) y -= a
+        a = pow(x, n) / factorial(n.toInt())
+        if (k % 2 == 1) y -= a
         else y += a
-        k+=1
+        k += 1
+        n += 2
     }
     return y
 }
@@ -358,21 +360,21 @@ fun cos(x: Double, eps: Double): Double {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun revert(n: Int): Int {
-    var n1=n
+    var n1 = n
     var k = 0
     var result = 0
-    var j=0
-    while (n1>0){
-        n1/=10
-        k+=1
+    var j = 0
+    while (n1 > 0) {
+        n1 /= 10
+        k += 1
     }
     n1 = n
-    while (n1>0) {
-        result+=n1%10*pow(10.toDouble(),(k-j).toDouble()).toInt()
-        j+=1
-        n1/=10
+    while (n1 > 0) {
+        result += n1 % 10 * pow(10.toDouble(), (k - j - 1).toDouble()).toInt()
+        j += 1
+        n1 /= 10
     }
-return result
+    return result
 }
 
 /**
@@ -384,7 +386,25 @@ return result
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean {
+    var n1 = n
+    var k = 0
+    var k1 = 0
+    var j = 0
+    while (n1 > 0) {
+        n1 /= 10
+        k++
+    }
+    if (k==1) return true
+    k1 = k
+    if (k % 2 == 1) k -= 1
+    for (i in 1..k / 2) {
+        if (n / pow(10.0, i.toDouble() - 1.0).toInt() % 10 == n / pow(10.0, k1.toDouble() - i).toInt() % 10) j++
+        else break
+    }
+    if (j == k/2) return true
+    else return false
+}
 
 /**
  * Средняя
