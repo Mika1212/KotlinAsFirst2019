@@ -3,7 +3,7 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
-import lesson2.task2.medianOf
+import lesson2.task2.medianOfI
 import lesson2.task2.medianOfD
 import kotlin.math.abs
 import kotlin.math.max
