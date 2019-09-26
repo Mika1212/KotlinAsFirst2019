@@ -96,10 +96,8 @@ fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
     val a1 = minOf(a, b, c)
     val a2 = medianOfI(a, b, c)
     return when {
-        a1 <= r -> true
-        a2 <= s -> true
-        a1 <= s -> true
-        a2 <= r -> true
+        a1 <= r && a2 <= s -> true
+        a1 <= s && a2 <= r -> true
         else -> false
     }
 }

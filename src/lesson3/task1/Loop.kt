@@ -77,7 +77,7 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun digitNumber(n: Int): Int {
-    var n1 = n
+    var n1 = abs(n)
     var count = if (n1 == 0) 1 else 0
     while (n1 > 0) {
         count++
@@ -231,15 +231,18 @@ fun isCoPrime(m: Int, n: Int): Boolean {
             n1 %= m1
         }
         if (m1 == 1 || n1 == 1) {
-            k = 20
+            k = 200
             break
         }
         if (m1 != 0 && n1 != 0) k += 1
-        if (k > 10) break
+        if (k > 100) break
     }
-    return k > 10
+    return k > 100
 }
-
+/*
+fun main() {
+    println(isCoPrime(50001,36744))
+}*/
 /**
  * Простая
  *
