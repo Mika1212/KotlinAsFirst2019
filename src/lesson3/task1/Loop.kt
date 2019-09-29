@@ -21,7 +21,7 @@ private val Double.kotlin: Any
 fun factorial(n: Int): Double {
     var result = 1.0
     for (i in 1..n) {
-        result = result * i // Please do not fix in master
+        result *= i // Please do not fix in master
     }
     return result
 }
@@ -305,22 +305,34 @@ fun collatzSteps(x: Int): Int {
  */
 fun sin(x: Double, eps: Double): Double {
     var a = 100.0
-    var y = x
-    var n = 3.0
+    var y = abs(x)
+    var n = 3
+    var k1 = x / y
     var k = 1
+    var y1 = 0.0
     if (x == 0.0) return 0.0
     if (x / PI % 2 == 0.0) return 0.0
-    while (abs(a) >= eps) {
-        a = pow(x, n) / factorial(n.toInt())
+    while (y > 2.0 * PI) {
+        y -= 2.0 * PI
+    }
+    y = k1 * y
+    y1 = y
+    do {
+        a = pow(y1, n.toDouble()) / factorial(n)
         if (k % 2 == 1) y -= a
         else y += a
-        k += 1
+        k++
         n += 2
-    }
-    return y
+    } while (abs(a) > eps)
+    return y - a
 }
-
-
+/*
+fun main() {
+    println(sin(-18.832102629018816,1e-10))
+}
+0.017452406459518247
+0.017452406459518247
+*/
 /**
  * Средняя
  *
@@ -332,21 +344,34 @@ fun sin(x: Double, eps: Double): Double {
  */
 fun cos(x: Double, eps: Double): Double {
     var a = 100.0
-    var y = 1.0
-    var n = 2.0
+    var y = abs(x)
+    var n = 2
+    var k1 = x / y
     var k = 1
+    var y1 = 0.0
     if (x == 0.0) return 1.0
     if (x / PI % 2 == 0.0) return 1.0
-    while (abs(a) >= eps) {
-        a = pow(x, n) / factorial(n.toInt())
+    while (y > 2.0 * PI) {
+        y -= 2.0 * PI
+    }
+    y1 = k1 * y
+    y = 1.0
+    do {
+        a = pow(y1, n.toDouble()) / factorial(n)
         if (k % 2 == 1) y -= a
         else y += a
-        k += 1
+        k++
         n += 2
-    }
-    return y
+    } while (abs(a) > eps)
+    return y + a
 }
-
+/*
+fun main() {
+    println(cos(-18.832102629018816, 1e-10))
+}
+0.9998476951604843
+0.9998476951604843
+*/
 /**
  * Средняя
  *
@@ -395,8 +420,10 @@ fun isPalindrome(n: Int): Boolean {
     k1 = k
     if (k % 2 == 1) k -= 1
     for (i in 1..k / 2) {
-        if (n / pow(10.0, i.toDouble() - 1.0).toInt() % 10 == n / pow(10.0, k1.toDouble() - i).toInt() % 10) j++
-        else break
+        if (n / pow(10.0, i.toDouble() - 1.0).toInt() % 10 == n / pow(10.0, k1.toDouble() - i).toInt() % 10)
+            j++
+        else
+            break
     }
     return j == k / 2
 }
@@ -443,7 +470,7 @@ fun squareSequenceDigit(n: Int): Int {
     var k1 = 0
     var a = 1
     var i = 1
-    var j = 1
+    var j = 0
 
     while (k1 < n) {
         if (k1 == n) break
@@ -480,7 +507,7 @@ fun fibSequenceDigit(n: Int): Int {
     var k1 = 0
     var a = 1
     var i = 1
-    var j = 1
+    var j = 0
 
     while (k1 < n) {
         if (k1 == n) break
