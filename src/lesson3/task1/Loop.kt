@@ -7,12 +7,6 @@ import lesson1.task1.sqr
 import java.lang.Math.pow
 import kotlin.math.*
 
-
-private val Double.kotlin: Any
-    get() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
 /**
  * Пример
  *
@@ -78,11 +72,11 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  */
 fun digitNumber(n: Int): Int {
     var n1 = abs(n)
-    var count = if (n1 == 0) 1 else 0
-    while (n1 > 0) {
+    var count = 0
+    do {
         count++
         n1 /= 10
-    }
+    } while (n1 > 0)
     return count
 }
 
@@ -120,73 +114,8 @@ fun lcm(m: Int, n: Int): Int {
         else
             n1 %= m1
     }
-    return n * m / (n1 + m1)
+    return n / (n1 + m1) * m
 }
-
-/*{
-    var k = 1
-    var a2 = 0
-    var b2 = 0
-    var a3 = 0
-    var b3 = 0
-    var a5 = 0
-    var b5 = 0
-    var a7 = 0
-    var b7 = 0
-    var m1 = m
-    var n1 = n
-    if (n1 == m1)
-        return m1
-    else {
-        while (m1 %2 == 0 || n1 %2== 0) {
-            if (m % 2 == 0) {
-                a2 += 1
-                m1 /= 2
-            }
-            if (n % 2 == 0) {
-                b2 += 1
-                n1 /= 2
-            }
-        }
-        if (a2 > 0 || b2 > 0) k *= max(a2, b2) * 2
-        while (m1 %3 == 0 || n1 %3== 0) {
-            if (m % 3 == 0) {
-                a3 += 1
-                m1 /= 3
-            }
-            if (n % 3 == 0) {
-                b3 += 1
-                n1 /= 3
-            }
-        }
-        if (a3 > 0 || b3 > 0) k *= max(a3, b3) * 3
-        while (m1 %5 == 0 || n1 %5==0) {
-            if (m % 5 == 0) {
-                a5 += 1
-                m1 /= 5
-            }
-            if (n % 5 == 0) {
-                b5 += 1
-                n1 /= 5
-            }
-        }
-        if (a5 > 0 || b5 > 0) k *= max(a5, b5) * 5
-        while (m1 %7==  0 || n1 %7== 0) {
-            if (m % 7 == 0) {
-                a7 += 1
-                m1 /= 7
-            }
-            if (n % 7 == 0) {
-                b7 += 1
-                n1 /= 7
-            }
-        }
-        if (a7 > 0 || b7 > 0) k *= max(a7, b7) * 7
-        k *= n1 * m1
-        return k
-    }
-}
-*/
 
 /**
  * Простая
@@ -194,7 +123,7 @@ fun lcm(m: Int, n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    for (i in 2..n / 2)
+    for (i in 2..sqrt(n.toDouble()).toInt())
         if (n % i == 0) {
             return i
         }
@@ -239,10 +168,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
     }
     return k > 100
 }
-/*
-fun main() {
-    println(isCoPrime(50001,36744))
-}*/
+
 /**
  * Простая
  *
@@ -257,13 +183,7 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
     val n2 = n.toDouble()
     m1 = floor(m1)
     n1 = floor(n1)
-    return when {
-        m == n -> true
-        m2 == sqr(m1) -> true
-        n2 == sqr(n1) -> true
-        abs(n1 - m1) > 0 -> true
-        else -> false
-    }
+    return m == n || m2 == sqr(m1) || n2 == sqr(n1) || abs(n1 - m1) > 0
 }
 
 /**
@@ -307,15 +227,13 @@ fun sin(x: Double, eps: Double): Double {
     var a = 100.0
     var y = abs(x)
     var n = 3
-    var k1 = x / y
+    val k1 = if (x >= 0) 1 else -1
     var k = 1
     var y1 = 0.0
-    if (x == 0.0) return 0.0
-    if (x / PI % 2 == 0.0) return 0.0
     while (y > 2.0 * PI) {
         y -= 2.0 * PI
     }
-    y = k1 * y
+    y *= k1
     y1 = y
     do {
         a = pow(y1, n.toDouble()) / factorial(n)
@@ -326,13 +244,7 @@ fun sin(x: Double, eps: Double): Double {
     } while (abs(a) > eps)
     return y - a
 }
-/*
-fun main() {
-    println(sin(-18.832102629018816,1e-10))
-}
-0.017452406459518247
-0.017452406459518247
-*/
+
 /**
  * Средняя
  *
@@ -346,11 +258,9 @@ fun cos(x: Double, eps: Double): Double {
     var a = 100.0
     var y = abs(x)
     var n = 2
-    var k1 = x / y
+    val k1 = if (abs(x) <= PI) 1 else -1
     var k = 1
     var y1 = 0.0
-    if (x == 0.0) return 1.0
-    if (x / PI % 2 == 0.0) return 1.0
     while (y > 2.0 * PI) {
         y -= 2.0 * PI
     }
@@ -365,13 +275,7 @@ fun cos(x: Double, eps: Double): Double {
     } while (abs(a) > eps)
     return y + a
 }
-/*
-fun main() {
-    println(cos(-18.832102629018816, 1e-10))
-}
-0.9998476951604843
-0.9998476951604843
-*/
+
 /**
  * Средняя
  *
@@ -408,24 +312,21 @@ fun revert(n: Int): Int {
  */
 fun isPalindrome(n: Int): Boolean {
     var n1 = n
-    var k = 0
-    var k1 = 0
+    var a = 0
+    var n2 = n
     var j = 0
-    if (n == 0) return true
     while (n1 > 0) {
+        do {
+            a = n2 % 10
+            n2 /= 10
+        } while (n2 > j)
+        if (n1 % 10 != a) return false
         n1 /= 10
-        k++
+        n2 = n1
+        if (j == 0) j += 1
+        j *= 10
     }
-    if (k == 1) return true
-    k1 = k
-    if (k % 2 == 1) k -= 1
-    for (i in 1..k / 2) {
-        if (n / pow(10.0, i.toDouble() - 1.0).toInt() % 10 == n / pow(10.0, k1.toDouble() - i).toInt() % 10)
-            j++
-        else
-            break
-    }
-    return j == k / 2
+    return true
 }
 
 /**
@@ -439,14 +340,12 @@ fun isPalindrome(n: Int): Boolean {
 fun hasDifferentDigits(n: Int): Boolean {
     val x = n % 10
     var k = 1
-    var n1 = n
-    var j = 0
+    var n1 = n / 10
+    var j = 1
     while (n1 > 0) {
         n1 /= 10
         j++
     }
-    if (n == 0) return false
-    if (j == 1) return false
     n1 = n
     while (n1 > 0) {
         n1 /= 10
