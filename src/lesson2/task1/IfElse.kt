@@ -3,8 +3,7 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
-import lesson2.task2.medianOfI
-import lesson2.task2.medianOfD
+import lesson2.task2.medianOfDoub
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -68,16 +67,13 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
 fun ageDescription(age: Int): String {
-    var b = age
-    if (age > 100 && age < 121) {
-        b = age % 100
-    }
-    return when {
-        b >= 5 && b <= 20 -> "$age лет"
-        b == 1 || b % 10 == 1 -> "$age год"
-        b == 2 || b % 10 == 2 -> "$age года"
-        b == 3 || b % 10 == 3 -> "$age года"
-        b == 4 || b % 10 == 4 -> "$age года"
+    var b = if (age>20 && age<100 || age>120) age%10 else age%100
+    return when (b){
+        in (5..20) -> "$age лет"
+        1 -> "$age год"
+        2 -> "$age года"
+        3 -> "$age года"
+        4 -> "$age года"
         else -> "$age лет"
     }
 }
@@ -126,12 +122,7 @@ fun whichRookThreatens(
     var b = 0
     if (kingX == rookX1 || kingY == rookY1) b += 1
     if (kingX == rookX2 || kingY == rookY2) b += 2
-    return when {
-        b == 1 -> 1
-        b == 2 -> 2
-        b == 3 -> 3
-        else -> 0
-    }
+    return b
 }
 /**
  * Простая
@@ -151,12 +142,7 @@ fun rookOrBishopThreatens(
     var b = 0
     if (kingX == rookX || kingY == rookY) b += 1
     if (abs(kingX - bishopX) == abs(kingY - bishopY)) b += 2
-    return when {
-        b == 1 -> 1
-        b == 2 -> 2
-        b == 3 -> 3
-        else -> 0
-    }
+    return b
 }
 
 /**
@@ -170,7 +156,7 @@ fun rookOrBishopThreatens(
 fun triangleKind(a: Double, b: Double, c: Double): Int {
     val a1 = maxOf(a, b, c)
     val a2 = minOf(a, b, c)
-    val a3 = medianOfD(a,b,c)
+    val a3 = medianOfDoub(a,b,c)
     return when {
         a2 + a3 < a1 -> -1
         a2 * a2 + a3 * a3 > a1 * a1 -> 0
