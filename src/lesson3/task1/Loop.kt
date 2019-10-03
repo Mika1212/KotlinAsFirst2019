@@ -90,7 +90,7 @@ fun fib(n: Int): Int {
     var n1 = n
     var f1 = 0
     var f2 = 1
-    var a = f2
+    var a = 0
     while (n1 - 1 > 0) {
         a = f2
         f2 += f1
@@ -150,24 +150,8 @@ fun maxDivisor(n: Int): Int {
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean {
-    var n1 = n
-    var m1 = m
-    var k = 0
-    while (n1 != 0 && m1 != 0) {
-        if (m1 > n1) m1 %= n1
-        else {
-            n1 %= m1
-        }
-        if (m1 == 1 || n1 == 1) {
-            k = 200
-            break
-        }
-        if (m1 != 0 && n1 != 0) k += 1
-        if (k > 100) break
-    }
-    return k > 100
-}
+fun isCoPrime(m: Int, n: Int): Boolean =
+    lcm(m, n) == m * n
 
 /**
  * Простая
@@ -285,20 +269,12 @@ fun cos(x: Double, eps: Double): Double {
  */
 fun revert(n: Int): Int {
     var n1 = n
-    var k = 0
     var result = 0
-    var j = 0
     while (n1 > 0) {
-        n1 /= 10
-        k += 1
-    }
-    n1 = n
-    while (n1 > 0) {
-        result += n1 % 10 * pow(10.toDouble(), (k - j - 1).toDouble()).toInt()
-        j += 1
+        result = (result + n1 % 10) * 10
         n1 /= 10
     }
-    return result
+    return result / 10
 }
 
 /**
@@ -323,8 +299,8 @@ fun isPalindrome(n: Int): Boolean {
         if (n1 % 10 != a) return false
         n1 /= 10
         n2 = n1
-        if (j == 0) j += 1
-        j *= 10
+        if (j == 0) j++
+        j = j * 10 - 1
     }
     return true
 }
