@@ -270,11 +270,11 @@ fun cos(x: Double, eps: Double): Double {
 fun revert(n: Int): Int {
     var n1 = n
     var result = 0
-    while (n1 > 0) {
-        result = (result + n1 % 10) * 10
+    do {
+        result = result * 10 + n1 % 10
         n1 /= 10
-    }
-    return result / 10
+    } while (n1 > 0)
+    return result
 }
 
 /**

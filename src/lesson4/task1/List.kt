@@ -3,6 +3,8 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import kotlin.math.max
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 /**
@@ -115,14 +117,24 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double = TODO()
+fun abs(v: List<Double>): Double {
+    var a = v.map { it * it }
+    return sqrt(a.fold(0.0) { previousResult, element ->
+        previousResult + element
+    })
+}
 
 /**
  * Простая
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double = TODO()
+fun mean(list: List<Double>): Double {
+    if (list.isEmpty()) return 0.0
+    return list.fold(0.0) { previousResult, element ->
+        previousResult + element
+    } / list.size
+}
 
 /**
  * Средняя
@@ -132,7 +144,23 @@ fun mean(list: List<Double>): Double = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double> = TODO()
+fun center(list: MutableList<Double>): MutableList<Double> {
+    if (list.isEmpty()) return list
+    val a = mean(list)
+    for ((index, element) in list.withIndex()) {
+        list[index] = element - a
+    }
+    return list
+}
+/* объясните, пожалуйста, почему это программа не работала
+{
+    if (list.isEmpty()) return list
+    var a = mean(list)
+    list.map {it-a}
+    return list
+}
+ */
+
 
 /**
  * Средняя
@@ -141,7 +169,12 @@ fun center(list: MutableList<Double>): MutableList<Double> = TODO()
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int = TODO()
+fun times(a: List<Int>, b: List<Int>): Int {
+    if (a.isEmpty() || b.isEmpty()) return 0
+    var c = 0
+    for (i in 0..max(a.size, b.size) - 1) c += a[i] * b[i]
+    return c
+}
 
 /**
  * Средняя
@@ -151,7 +184,14 @@ fun times(a: List<Int>, b: List<Int>): Int = TODO()
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0 при любом x.
  */
-fun polynom(p: List<Int>, x: Int): Int = TODO()
+fun polynom(p: List<Int>, x: Int): Int {
+    if (p.isEmpty()) return 0
+    var a = 0
+    for ((index, element) in p.withIndex()) {
+        a += element * x.toDouble().pow(index).toInt()
+    }
+    return a
+}
 
 /**
  * Средняя
@@ -163,7 +203,16 @@ fun polynom(p: List<Int>, x: Int): Int = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Int>): MutableList<Int> = TODO()
+fun accumulate(list: MutableList<Int>): MutableList<Int> {
+    if (list.isEmpty()) return list
+    val list1 = list
+    var a = list[0]
+    for (i in 1..list.size - 1) {
+        a += list1[i]
+        list[i] = a
+    }
+    return list
+}
 
 /**
  * Средняя
@@ -172,7 +221,21 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> = TODO()
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> = TODO()
+fun factorize(n: Int): List<Int> {
+    var a = 2
+    var n1 = n
+    val list = mutableListOf<Int>()
+    while (n1 > 1) {
+        if (n1 % a == 0) {
+            while (n1 % a == 0) {
+                list.add(a)
+                n1 /= a
+            }
+        }
+        a++
+    }
+    return list
+}
 
 /**
  * Сложная
@@ -181,7 +244,7 @@ fun factorize(n: Int): List<Int> = TODO()
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String = TODO()
+fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*")
 
 /**
  * Средняя
