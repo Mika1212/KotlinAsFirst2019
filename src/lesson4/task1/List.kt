@@ -347,14 +347,6 @@ fun decimalFromString(str: String, base: Int): Int {
     return sum
 }
 
-
-fun lettertoint(letter:Char) :Int = letter.toInt()
-
-
-
-fun main() {
-    println(lettertoint('6'))
-}
 /**
  * Сложная
  *
