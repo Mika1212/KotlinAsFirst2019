@@ -253,7 +253,15 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int> = TODO()
+fun convert(n: Int, base: Int): List<Int> {
+    var list = mutableListOf<Int>()
+    var n1 = n
+    while (n1 > 0) {
+        list.add(0, n1 % base)
+        n1 /= base
+    }
+    return list
+}
 
 /**
  * Сложная
@@ -266,7 +274,28 @@ fun convert(n: Int, base: Int): List<Int> = TODO()
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String = TODO()
+fun convertToString(n: Int, base: Int): String {
+    val list = mutableListOf<String>()
+    var n1 = n
+    var a = 0
+    var j = 0
+    while (n1 > 0) {
+        a = n1 % base
+        if (a > 9) {
+            for (i in 'a'..'z') {
+                j++
+                if (j == a - 9) {
+                    list.add(0, i.toString())
+                    break
+                }
+            }
+        } else
+            list.add(0, a.toString())
+        n1 /= base
+        j = 0
+    }
+    return list.joinToString(separator = "")
+}
 
 /**
  * Средняя
@@ -275,7 +304,15 @@ fun convertToString(n: Int, base: Int): String = TODO()
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    var a = 0
+    var list = mutableListOf<Int>()
+    list = digits.toMutableList()
+    for (element in list) {
+        a = a * base + element
+    }
+    return a
+}
 
 /**
  * Сложная
@@ -289,8 +326,35 @@ fun decimal(digits: List<Int>, base: Int): Int = TODO()
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    var letter = ' '
+    var j = 9
+    var sum = 0
+    for (char in str) {
+        letter = char
+        if (letter.toInt()-48 > 9) {
+            for (k in 'a'..'z') {
+                j++
+                if (k == letter) {
+                    sum = sum * base + j
+                    break
+                }
+            }
+        } else
+            sum = sum * base + letter.toInt()-48
+        j = 9
+    }
+    return sum
+}
 
+
+fun lettertoint(letter:Char) :Int = letter.toInt()
+
+
+
+fun main() {
+    println(lettertoint('6'))
+}
 /**
  * Сложная
  *

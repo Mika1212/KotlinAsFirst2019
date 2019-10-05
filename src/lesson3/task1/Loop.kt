@@ -290,17 +290,16 @@ fun isPalindrome(n: Int): Boolean {
     var n1 = n
     var a = 0
     var n2 = n
-    var j = 0
+    var j = 1
     while (n1 > 0) {
         do {
             a = n2 % 10
             n2 /= 10
-        } while (n2 > j)
+        } while (n2 > j-1)
         if (n1 % 10 != a) return false
         n1 /= 10
         n2 = n1
-        if (j == 0) j++
-        j = j * 10 - 1
+        j *= 10
     }
     return true
 }
