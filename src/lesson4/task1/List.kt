@@ -332,7 +332,7 @@ fun decimalFromString(str: String, base: Int): Int {
     var sum = 0
     for (char in str) {
         letter = char
-        if (letter.toInt()-48 > 9) {
+        if (letter.toInt() - 48 > 9) {
             for (k in 'a'..'z') {
                 j++
                 if (k == letter) {
@@ -341,7 +341,7 @@ fun decimalFromString(str: String, base: Int): Int {
                 }
             }
         } else
-            sum = sum * base + letter.toInt()-48
+            sum = sum * base + letter.toInt() - 48
         j = 9
     }
     return sum
