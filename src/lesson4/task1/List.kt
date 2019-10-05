@@ -117,12 +117,8 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double {
-    var a = v.map { it * it }
-    return sqrt(a.fold(0.0) { previousResult, element ->
-        previousResult + element
-    })
-}
+fun abs(v: List<Double>): Double =
+    sqrt(v.map { it * it }.fold(0.0) { previousResult, element -> previousResult + element })
 
 /**
  * Простая
@@ -254,12 +250,12 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
 fun convert(n: Int, base: Int): List<Int> {
-    var list = mutableListOf<Int>()
+    val list = mutableListOf<Int>()
     var n1 = n
-    while (n1 > 0) {
+    do {
         list.add(0, n1 % base)
         n1 /= base
-    }
+    } while (n1 > 0)
     return list
 }
 
@@ -279,7 +275,7 @@ fun convertToString(n: Int, base: Int): String {
     var n1 = n
     var a = 0
     var j = 0
-    while (n1 > 0) {
+   do  {
         a = n1 % base
         if (a > 9) {
             for (i in 'a'..'z') {
@@ -293,7 +289,7 @@ fun convertToString(n: Int, base: Int): String {
             list.add(0, a.toString())
         n1 /= base
         j = 0
-    }
+    }  while (n1 > 0)
     return list.joinToString(separator = "")
 }
 
