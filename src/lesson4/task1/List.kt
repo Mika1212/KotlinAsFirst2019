@@ -275,7 +275,7 @@ fun convertToString(n: Int, base: Int): String {
     var n1 = n
     var a = 0
     var j = 0
-   do  {
+    do {
         a = n1 % base
         if (a > 9) {
             for (i in 'a'..'z') {
@@ -289,7 +289,7 @@ fun convertToString(n: Int, base: Int): String {
             list.add(0, a.toString())
         n1 /= base
         j = 0
-    }  while (n1 > 0)
+    } while (n1 > 0)
     return list.joinToString(separator = "")
 }
 
