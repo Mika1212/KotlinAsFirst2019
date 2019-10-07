@@ -362,11 +362,11 @@ fun roman(n: Int): String {
     }
     when {
         k100 == 9 -> {
-            k100=-9
+            k100 = -9
             result += "CM"
         }
         k100 == 4 -> {
-            k100-=4
+            k100 -= 4
             result += "CD"
         }
         k100 > 4 -> {
@@ -399,10 +399,10 @@ fun roman(n: Int): String {
     when {
         k1 == 9 -> {
             result += "IX"
-            k1-=9
+            k1 -= 9
         }
         k1 == 4 -> {
-            k1-=4
+            k1 -= 4
             result += "IV"
         }
         k1 > 4 -> {
