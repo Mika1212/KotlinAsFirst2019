@@ -302,8 +302,7 @@ fun convertToString(n: Int, base: Int): String {
  */
 fun decimal(digits: List<Int>, base: Int): Int {
     var a = 0
-    var list = mutableListOf<Int>()
-    list = digits.toMutableList()
+    val list = digits.toMutableList()
     for (element in list) {
         a = a * base + element
     }
@@ -351,7 +350,72 @@ fun decimalFromString(str: String, base: Int): Int {
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    var result = ""
+    var k1000 = n / 1000
+    var k100 = n % 1000 / 100
+    var k10 = n % 100 / 10
+    var k1 = n % 10
+    while (k1000 > 0) {
+        result += "M"
+        k1000 -= 1
+    }
+    when {
+        k100 == 9 -> {
+            k100=-9
+            result += "CM"
+        }
+        k100 == 4 -> {
+            k100-=4
+            result += "CD"
+        }
+        k100 > 4 -> {
+            result += "D"
+            k100 -= 5
+        }
+    }
+    while (k100 > 0) {
+        result += "C"
+        k100 -= 1
+    }
+    when {
+        k10 == 9 -> {
+            result += "XC"
+            k10 -= 9
+        }
+        k10 == 4 -> {
+            result += "XL"
+            k10 -= 4
+        }
+        k10 > 4 -> {
+            result += "L"
+            k10 -= 5
+        }
+    }
+    while (k10 > 0) {
+        result += "X"
+        k10 -= 1
+    }
+    when {
+        k1 == 9 -> {
+            result += "IX"
+            k1-=9
+        }
+        k1 == 4 -> {
+            k1-=4
+            result += "IV"
+        }
+        k1 > 4 -> {
+            result += "V"
+            k1 -= 5
+        }
+    }
+    while (k1 > 0) {
+        result += "I"
+        k1 -= 1
+    }
+    return result
+}
 
 /**
  * Очень сложная
