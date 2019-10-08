@@ -424,4 +424,118 @@ fun roman(n: Int): String {
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+
+fun russian(n: Int): String {
+    var n1 = n
+    val result = mutableListOf<String>()
+    if (n1 % 100 in 10..19) {
+        when (n1 % 100) {
+            10 -> result.add(0, "десять")
+            11 -> result.add(0, "одиннадцать")
+            12 -> result.add(0, "двенадцать")
+            13 -> result.add(0, "тринадцать")
+            14 -> result.add(0, "четырнадцать")
+            15 -> result.add(0, "пятнадцать")
+            16 -> result.add(0, "шестнадцать")
+            17 -> result.add(0, "семнадцать")
+            18 -> result.add(0, "восемнадцать")
+            else -> result.add(0, "девятнадцать")
+        }
+        n1 /= 100
+        if (n1 == 0) return result.joinToString(separator = " ")
+    } else {
+        when (n1 % 10) {
+            1 -> result.add(0, "один")
+            2 -> result.add(0, "два")
+            3 -> result.add(0, "три")
+            4 -> result.add(0, "четыре")
+            5 -> result.add(0, "пять")
+            6 -> result.add(0, "шесть")
+            7 -> result.add(0, "семь")
+            8 -> result.add(0, "восемь")
+            9 -> result.add(0, "девять")
+        }
+        n1 /= 10
+        if (n1 == 0) return result.joinToString(separator = " ")
+        when (n1 % 10) {
+            2 -> result.add(0, "двадцать")
+            3 -> result.add(0, "тридцать")
+            4 -> result.add(0, "сорок")
+            5 -> result.add(0, "пятьдесят")
+            6 -> result.add(0, "шестьдесят")
+            7 -> result.add(0, "семьдесят")
+            8 -> result.add(0, "восемьдесят")
+            9 -> result.add(0, "девяносто")
+        }
+        n1 /= 10
+        if (n1 == 0) return result.joinToString(separator = " ")
+    }
+    when (n1 % 10) {
+        1 -> result.add(0, "сто")
+        2 -> result.add(0, "двести")
+        3 -> result.add(0, "триста")
+        4 -> result.add(0, "четыреста")
+        5 -> result.add(0, "пятьсот")
+        6 -> result.add(0, "шестьсот")
+        7 -> result.add(0, "семьсот")
+        8 -> result.add(0, "восемьсот")
+        9 -> result.add(0, "девятьсот")
+    }
+    n1 /= 10
+    if (n1 == 0) return result.joinToString(separator = " ")
+    if (n1 % 100 in 10..19) {
+        when (n1 % 100) {
+            10 -> result.add(0, "десять тысяч")
+            11 -> result.add(0, "одиннадцать тысяч")
+            12 -> result.add(0, "двенадцать тысяч")
+            13 -> result.add(0, "тринадцать тысяч")
+            14 -> result.add(0, "четырнадцать тысяч")
+            15 -> result.add(0, "пятнадцать тысяч")
+            16 -> result.add(0, "шестнадцать тысяч")
+            17 -> result.add(0, "семнадцать тысяч")
+            18 -> result.add(0, "восемнадцать тысяч")
+            else -> result.add(0, "девятнадцать тысяч")
+        }
+        n1 /= 100
+        if (n1 == 0) return result.joinToString(separator = " ")
+    } else {
+        when (n1 % 10) {
+            0 -> result.add(0, "тысяч")
+            1 -> result.add(0, "одна тысяча")
+            2 -> result.add(0, "две тысячи")
+            3 -> result.add(0, "три тысячи")
+            4 -> result.add(0, "четыре тысячи")
+            5 -> result.add(0, "пять тысяч")
+            6 -> result.add(0, "шесть тысяч")
+            7 -> result.add(0, "семь тысяч")
+            8 -> result.add(0, "восемь тысяч")
+            else -> result.add(0, "девять тысяч")
+        }
+        n1 /= 10
+        if (n1 == 0) return result.joinToString(separator = " ")
+        when (n1 % 10) {
+            2 -> result.add(0, "двадцать")
+            3 -> result.add(0, "тридцать")
+            4 -> result.add(0, "сорок")
+            5 -> result.add(0, "пятьдесят")
+            6 -> result.add(0, "шестьдесят")
+            7 -> result.add(0, "семьдесят")
+            8 -> result.add(0, "восемьдесят")
+            9 -> result.add(0, "девяносто")
+        }
+        n1 /= 10
+    }
+    if (n1 == 0) return result.joinToString(separator = " ")
+    when (n1 % 10) {
+        1 -> result.add(0, "сто")
+        2 -> result.add(0, "двести")
+        3 -> result.add(0, "триста")
+        4 -> result.add(0, "четыреста")
+        5 -> result.add(0, "пятьсот")
+        6 -> result.add(0, "шестьсот")
+        7 -> result.add(0, "семьсот")
+        8 -> result.add(0, "восемьсот")
+        else -> result.add(0, "девятьсот")
+    }
+    return result.joinToString(separator = " ")
+}
