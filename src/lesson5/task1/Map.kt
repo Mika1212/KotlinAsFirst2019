@@ -95,8 +95,8 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val a = mutableMapOf<Int, List<String>>()
     val b = mutableListOf<String>()
     for (i in 1..5) {
-        for ((key, value) in grades) if (i == value) b+=key
-        if (b.isNotEmpty()) a.put(i,b.toList())
+        for ((key, value) in grades) if (i == value) b += key
+        if (b.isNotEmpty()) a.put(i, b.toList())
         b.clear()
     }
     return a
@@ -113,7 +113,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
-    for ((key, value) in a) if (a[key]!=b[key]) return false
+    for ((key, value) in a) if (a[key] != b[key]) return false
     return true
 }
 
@@ -133,7 +133,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
     for ((key, value) in a) {
-        if (key in b && a[key]==b[key]) a.remove(key)
+        if (key in b && a[key] == b[key]) a.remove(key)
     }
     println(a)
 }
@@ -145,7 +145,11 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
  * В выходном списке не должно быть повторяюихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
+    val c = mutableListOf<String>()
+    for (i in a) if (i in b && i !in c) c.add(i)
+    return c
+}
 
 /**
  * Средняя
@@ -164,7 +168,26 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
  *     mapOf("Emergency" to "911", "Police" to "02")
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
-fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> = TODO()
+fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
+    val result = mutableMapOf<String, String>()
+    val c = mutableListOf<String>()
+    val d = if (mapA.count()>=mapB.count()) mapA else mapB
+    val d1= if (mapA.count()>=mapB.count()) mapB else mapA
+    for ((key, value) in d) {
+        c += value
+        for ((key1, value1) in d1) if (key == key1 && value1 != value) {
+            if (d1==mapA) c.add(0,value1) else c += value1
+        }
+        result[key] = c.joinToString()
+        c.clear()
+    }
+    for ((key, value) in d1) {
+        if (key !in result) c += value
+        if (c.isNotEmpty()) result[key] = c.joinToString()
+        c.clear()
+    }
+    return result
+}
 
 /**
  * Средняя
