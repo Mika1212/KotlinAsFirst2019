@@ -243,7 +243,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
             b = name
         }
     }
-return b
+    return b
 }
 
 /**
@@ -256,8 +256,8 @@ return b
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    val a= chars.toSet()
-    for (i in 0..word.length-1 ) {
+    val a = chars.toSet()
+    for (i in 0..word.length - 1) {
         if (word[i] !in a) return false
     }
     return true
@@ -276,19 +276,19 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
-    val c= mutableSetOf<String>()
+    val c = mutableSetOf<String>()
     val result = mutableMapOf<String, Int>()
-    var a =0
+    var a = 0
     for (i in list) {
         for (j in list) {
-            if (j==i && j in c) {
+            if (j == i && j in c) {
                 a += 1
             } else c.add(j)
         }
-        result[i]=a
-        a=0
+        result[i] = a
+        a = 0
     }
-    for ((i,j) in result) if (j==1) result.remove(i)
+    for ((i, j) in result) if (j == 1) result.remove(i)
     return result
 }
 
@@ -302,16 +302,16 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    var k=0
-    var p=0
+    var k = 0
+    var p = 0
     for (i in words) {
         k++
         val a = i
-        for (j in k..words.size-1) {
-            val e=words[j]
-            if (a.length==e.length) for (l in 0..e.length-1) if (a[l]==e[e.length-l-1]) p++
-            if (p==e.length) return true
-            p=0
+        for (j in k..words.size - 1) {
+            val e = words[j]
+            if (a.length == e.length) for (l in 0..e.length - 1) if (a[l] == e[e.length - l - 1]) p++
+            if (p == e.length) return true
+            p = 0
         }
     }
     return false
