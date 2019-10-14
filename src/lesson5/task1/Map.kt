@@ -171,12 +171,12 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
     val result = mutableMapOf<String, String>()
     val c = mutableListOf<String>()
-    val d = if (mapA.count()>=mapB.count()) mapA else mapB
-    val d1= if (mapA.count()>=mapB.count()) mapB else mapA
+    val d = if (mapA.count() >= mapB.count()) mapA else mapB
+    val d1 = if (mapA.count() >= mapB.count()) mapB else mapA
     for ((key, value) in d) {
         c += value
         for ((key1, value1) in d1) if (key == key1 && value1 != value) {
-            if (d1==mapA) c.add(0,value1) else c += value1
+            if (d1 == mapA) c.add(0, value1) else c += value1
         }
         result[key] = c.joinToString()
         c.clear()
@@ -199,7 +199,24 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    val result = mutableMapOf("" to 0.0)
+    var b = 0.0
+    var j = 0
+    result.clear()
+    for ((name, value) in stockPrices) {
+        for ((name1, value1) in stockPrices) {
+            if (name == name1) {
+                b += value1
+                j++
+            }
+        }
+        result[name] = b / j
+        j = 0
+        b = 0.0
+    }
+    return result
+}
 
 /**
  * Средняя
@@ -216,7 +233,18 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *     "печенье"
  *   ) -> "Мария"
  */
-fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? = TODO()
+fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
+    var a = 999999999.0
+    var b: String? = null
+    for ((name, value) in stuff) {
+        val (type, costs) = value
+        if (type == kind && costs < a) {
+            a = costs
+            b = name
+        }
+    }
+return b
+}
 
 /**
  * Средняя
@@ -227,7 +255,13 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
+fun canBuildFrom(chars: List<Char>, word: String): Boolean {
+    val a= chars.toSet()
+    for (i in 0..word.length-1 ) {
+        if (word[i] !in a) return false
+    }
+    return true
+}
 
 /**
  * Средняя
@@ -241,7 +275,22 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
+fun extractRepeats(list: List<String>): Map<String, Int> {
+    val c= mutableSetOf<String>()
+    val result = mutableMapOf<String, Int>()
+    var a =0
+    for (i in list) {
+        for (j in list) {
+            if (j==i && j in c) {
+                a += 1
+            } else c.add(j)
+        }
+        result[i]=a
+        a=0
+    }
+    for ((i,j) in result) if (j==1) result.remove(i)
+    return result
+}
 
 /**
  * Средняя
@@ -252,7 +301,21 @@ fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
  * Например:
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
-fun hasAnagrams(words: List<String>): Boolean = TODO()
+fun hasAnagrams(words: List<String>): Boolean {
+    var k=0
+    var p=0
+    for (i in words) {
+        k++
+        val a = i
+        for (j in k..words.size-1) {
+            val e=words[j]
+            if (a.length==e.length) for (l in 0..e.length-1) if (a[l]==e[e.length-l-1]) p++
+            if (p==e.length) return true
+            p=0
+        }
+    }
+    return false
+}
 
 /**
  * Сложная
