@@ -445,7 +445,6 @@ fun russian(n: Int): String {
         if (n1 == 0) return result.joinToString(separator = " ")
     } else {
         when (n1 % 10) {
-            0 -> result.add(0, "ноль")
             1 -> result.add(0, "один")
             2 -> result.add(0, "два")
             3 -> result.add(0, "три")
@@ -456,6 +455,7 @@ fun russian(n: Int): String {
             8 -> result.add(0, "восемь")
             9 -> result.add(0, "девять")
         }
+        if (n1 == 0) return "ноль"
         n1 /= 10
         if (n1 == 0) return result.joinToString(separator = " ")
         when (n1 % 10) {
@@ -539,7 +539,4 @@ fun russian(n: Int): String {
         else -> result.add(0, "девятьсот")
     }
     return result.joinToString(separator = " ")
-}
-fun main() {
-    println((russian(17)))
 }

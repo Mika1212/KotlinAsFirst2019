@@ -94,7 +94,7 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val a = mutableMapOf<Int, List<String>>()
     val b = mutableListOf<String>()
-    for (i in 1..5) {
+    for (i in 0..5) {
         for ((key, value) in grades) if (i == value) b += key
         if (b.isNotEmpty()) a.put(i, b.toList())
         b.clear()
@@ -132,10 +132,9 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *     -> a changes to mutableMapOf() aka becomes empty
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
-    for ((key, value) in a) {
-        if (key in b && a[key] == b[key]) a.remove(key)
-    }
-    println(a)
+    val c = mutableSetOf<String>()
+    for ((key, value) in a) if (key in b && a[key] == b[key]) c.add(key)
+    for (i in c) a.remove(i)
 }
 
 /**
@@ -258,7 +257,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     val a = chars.toSet()
     for (i in 0..word.length - 1) {
-        if (word[i] !in a) return false
+        if (word[i].toLowerCase() !in a) return false
     }
     return true
 }
@@ -276,19 +275,20 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
+    val b = mutableSetOf<String>()
     val c = mutableSetOf<String>()
-    val result = mutableMapOf<String, Int>()
-    var a = 0
+    val result: MutableMap<String, Int> = mutableMapOf()
     for (i in list) {
-        for (j in list) {
-            if (j == i && j in c) {
-                a += 1
-            } else c.add(j)
-        }
-        result[i] = a
-        a = 0
+        if (result[i] == null)
+            for (j in list) {
+                c.add(j)
+                if (j == i && j in c) {
+                    result[i] = result.getOrDefault(i, 0) + 1
+                }
+            }
+        if (result[i] == 1) b.add(i)
     }
-    for ((i, j) in result) if (j == 1) result.remove(i)
+    for (i in b) result.remove(i)
     return result
 }
 
@@ -309,7 +309,10 @@ fun hasAnagrams(words: List<String>): Boolean {
         val a = i
         for (j in k..words.size - 1) {
             val e = words[j]
-            if (a.length == e.length) for (l in 0..e.length - 1) if (a[l] == e[e.length - l - 1]) p++
+            if (a.length == e.length) for (l in 0..e.length - 1)
+                if (a[l] in e) p++
+                else
+                    break
             if (p == e.length) return true
             p = 0
         }
@@ -341,7 +344,9 @@ fun hasAnagrams(words: List<String>): Boolean {
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
  */
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO()
+fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
+    
+}
 
 /**
  * Сложная
