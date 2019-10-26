@@ -4,7 +4,6 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import kotlin.math.max
-import kotlin.math.pow
 import kotlin.math.sqrt
 
 /**
@@ -258,7 +257,7 @@ fun convert(n: Int, base: Int): List<Int> {
  * (например, n.toString(base) и подобные), запрещается.
  */
 
-fun convertToStringHelper(number:Int):String {
+fun convertToStringHelper(number: Int): String {
     return if (number < 10) "$number" else {
         val a = 'a' + number - 10
         a.toString()
@@ -266,9 +265,9 @@ fun convertToStringHelper(number:Int):String {
 }
 
 fun convertToString(n: Int, base: Int): String {
-    var result=""
-    for (i in convert(n,base)) {
-        result+= convertToStringHelper(i)
+    var result = ""
+    for (i in convert(n, base)) {
+        result += convertToStringHelper(i)
     }
     return result
 }
@@ -301,26 +300,26 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * (например, str.toInt(base)), запрещается.
  */
 
-fun decimalFromSrtingHelper(number:Char):Int {
-    var k=0
+fun decimalFromSrtingHelper(number: Char): Int {
+    var k = 0
     for (i in '0'..'9') {
-        if (number==i) return k
+        if (number == i) return k
         k++
     }
-    k=10
+    k = 10
     for (i in 'a'..'z') {
-        if (number==i) return k
+        if (number == i) return k
         k++
     }
     return 1
 }
 
 fun decimalFromString(str: String, base: Int): Int {
-    val a= mutableListOf<Int>()
+    val a = mutableListOf<Int>()
     for (i in str) {
         a.add(decimalFromSrtingHelper(i))
     }
-    return decimal(a,base)
+    return decimal(a, base)
 }
 
 /**
