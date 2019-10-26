@@ -141,22 +141,12 @@ fun mean(list: List<Double>): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    if (list.isEmpty()) return list
     val a = mean(list)
     for ((index, element) in list.withIndex()) {
         list[index] = element - a
     }
     return list
 }
-/* объясните, пожалуйста, почему это программа не работала
-{
-    if (list.isEmpty()) return list
-    var a = mean(list)
-    list.map {it-a}
-    return list
-}
- */
-
 
 /**
  * Средняя
@@ -166,7 +156,6 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
 fun times(a: List<Int>, b: List<Int>): Int {
-    if (a.isEmpty() || b.isEmpty()) return 0
     var c = 0
     for (i in 0..max(a.size, b.size) - 1) c += a[i] * b[i]
     return c
@@ -181,12 +170,12 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Значение пустого многочлена равно 0 при любом x.
  */
 fun polynom(p: List<Int>, x: Int): Int {
-    if (p.isEmpty()) return 0
-    var a = 0
-    for ((index, element) in p.withIndex()) {
-        a += element * x.toDouble().pow(index).toInt()
+    val a = p
+    var b = 1
+    return a.fold(0) { previousResult, element ->
+        if (b != 1 || previousResult != 0) b = b * x
+        previousResult + element * b
     }
-    return a
 }
 
 /**
@@ -200,11 +189,9 @@ fun polynom(p: List<Int>, x: Int): Int {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
-    if (list.isEmpty()) return list
-    val list1 = list
-    var a = list[0]
-    for (i in 1..list.size - 1) {
-        a += list1[i]
+    var a = 0
+    for (i in 0..list.size - 1) {
+        a += list[i]
         list[i] = a
     }
     return list
@@ -270,27 +257,20 @@ fun convert(n: Int, base: Int): List<Int> {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
+
+fun convertToStringHelper(number:Int):String {
+    return if (number < 10) "$number" else {
+        val a = 'a' + number - 10
+        a.toString()
+    }
+}
+
 fun convertToString(n: Int, base: Int): String {
-    val list = mutableListOf<String>()
-    var n1 = n
-    var a = 0
-    var j = 0
-    do {
-        a = n1 % base
-        if (a > 9) {
-            for (i in 'a'..'z') {
-                j++
-                if (j == a - 9) {
-                    list.add(0, i.toString())
-                    break
-                }
-            }
-        } else
-            list.add(0, a.toString())
-        n1 /= base
-        j = 0
-    } while (n1 > 0)
-    return list.joinToString(separator = "")
+    var result=""
+    for (i in convert(n,base)) {
+        result+= convertToStringHelper(i)
+    }
+    return result
 }
 
 /**
@@ -302,8 +282,7 @@ fun convertToString(n: Int, base: Int): String {
  */
 fun decimal(digits: List<Int>, base: Int): Int {
     var a = 0
-    val list = digits.toMutableList()
-    for (element in list) {
+    for (element in digits) {
         a = a * base + element
     }
     return a
@@ -321,25 +300,27 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int {
-    var letter = ' '
-    var j = 9
-    var sum = 0
-    for (char in str) {
-        letter = char
-        if (letter.toInt() - 48 > 9) {
-            for (k in 'a'..'z') {
-                j++
-                if (k == letter) {
-                    sum = sum * base + j
-                    break
-                }
-            }
-        } else
-            sum = sum * base + letter.toInt() - 48
-        j = 9
+
+fun decimalFromSrtingHelper(number:Char):Int {
+    var k=0
+    for (i in '0'..'9') {
+        if (number==i) return k
+        k++
     }
-    return sum
+    k=10
+    for (i in 'a'..'z') {
+        if (number==i) return k
+        k++
+    }
+    return 1
+}
+
+fun decimalFromString(str: String, base: Int): Int {
+    val a= mutableListOf<Int>()
+    for (i in str) {
+        a.add(decimalFromSrtingHelper(i))
+    }
+    return decimal(a,base)
 }
 
 /**
