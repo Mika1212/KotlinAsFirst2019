@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import kotlin.math.max
+
 /**
  * Пример
  *
@@ -94,10 +96,20 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val a = mutableMapOf<Int, List<String>>()
     val b = mutableListOf<String>()
+    val c = mutableListOf<String>()
+    val check = mutableSetOf<Int>()
     for (i in 0..5) {
-        for ((key, value) in grades) if (i == value) b += key
+        for ((key, value) in grades) {
+            if (i == value) b += key
+            if ((value > 5 && (value in check || c.isEmpty())) && if (i > 0 && value in check) false else true) {
+                c += key
+                check += value
+                if (c.isNotEmpty()) a.put(value, c.toList())
+            }
+        }
         if (b.isNotEmpty()) a.put(i, b.toList())
         b.clear()
+        c.clear()
     }
     return a
 }
@@ -233,7 +245,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *   ) -> "Мария"
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
-    var a = 999999999.0
+    var a = Double.MAX_VALUE
     var b: String? = null
     for ((name, value) in stuff) {
         val (type, costs) = value
@@ -255,7 +267,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    val a = chars.toSet()
+    val a = chars.toString().toLowerCase().toSet()
     for (i in 0..word.length - 1) {
         if (word[i].toLowerCase() !in a) return false
     }
@@ -344,17 +356,20 @@ fun hasAnagrams(words: List<String>): Boolean {
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
  */
+
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
     val result = friends.toMutableMap()
-    for ((key, value) in friends) {
-        val a = value.toMutableSet()
-        for (friendName in value)
-            if (friends[friendName] != null) {
-                for (name in friends[friendName]!!) {
-                    if (name !in a && name != key) a += name
-                }
-                result[key] = a
-            } else result[friendName] = emptySet()
+    for (i in 0..2) {
+        for ((key, value) in friends) {
+            val a = value.toMutableSet()
+            for (friendName in value)
+                if (friends[friendName] != null) {
+                    for (name in friends[friendName]!!) {
+                        if (name !in a && name != key) a += name
+                    }
+                    result[key] = a
+                } else result[friendName] = emptySet()
+        }
     }
     return result
 }
@@ -376,7 +391,22 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    val a = mutableMapOf<Int, Int>()
+    var j = 0
+    for (i in list) {
+        a.put(i, j)
+        j++
+    }
+    j = 0
+    for (i in list) {
+        if (a.containsKey(number - i)) if (j < a[number - i]!!) return Pair(j, a[number - i]!!)
+        else
+            if (j > a[number - i]!!) return Pair(a[number - i]!!, j)
+        j++
+    }
+    return Pair(-1, -1)
+}
 
 /**
  * Очень сложная
