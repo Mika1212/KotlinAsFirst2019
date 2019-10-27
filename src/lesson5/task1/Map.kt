@@ -101,7 +101,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     for (i in 0..5) {
         for ((key, value) in grades) {
             if (i == value) b += key
-            if ((value > 5 && (value in check || c.isEmpty())) && if (i > 0 && value in check) false else true) {
+            if (((value > 5 || value < 0) && (value in check || c.isEmpty())) && if (i > 0 && value in check) false else true) {
                 c += key
                 check += value
                 if (c.isNotEmpty()) a.put(value, c.toList())
@@ -267,9 +267,9 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    val a = chars.toString().toLowerCase().toSet()
+    val a = chars.toSet()
     for (i in 0..word.length - 1) {
-        if (word[i].toLowerCase() !in a) return false
+        if (word[i].toLowerCase() !in a || word[i].toUpperCase() !in a) return false
     }
     return true
 }
@@ -359,17 +359,15 @@ fun hasAnagrams(words: List<String>): Boolean {
 
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
     val result = friends.toMutableMap()
-    for (i in 0..2) {
-        for ((key, value) in friends) {
-            val a = value.toMutableSet()
-            for (friendName in value)
-                if (friends[friendName] != null) {
-                    for (name in friends[friendName]!!) {
-                        if (name !in a && name != key) a += name
-                    }
-                    result[key] = a
-                } else result[friendName] = emptySet()
-        }
+    for ((key, value) in friends) {
+        val a = value.toMutableSet()
+        for (friendName in value)
+            if (friends[friendName] != null) {
+                for (name in friends[friendName]!!) {
+                    if (name !in a && name != key) a += name
+                }
+                result[key] = a
+            } else result[friendName] = emptySet()
     }
     return result
 }
