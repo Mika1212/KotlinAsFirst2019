@@ -99,17 +99,14 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val c = mutableListOf<String>()
     val check = mutableSetOf<Int>()
     var check1 = 0
-    for (i in 0..10) {
+    for (i in 0..grades.count()) {
         for ((key, value) in grades) {
-            if (i == value) b += key
-            if (((value > 5 || value < 0) && (value == check1 || c.isEmpty())) && if (i > 0 && value in check) false else true) {
+            if (((value == check1 || c.isEmpty())) && if (i > 0 && value in check) false else true) {
                 c += key
                 check1 = value
                 if (c.isNotEmpty()) a.put(value, c.toList())
             }
         }
-        if (b.isNotEmpty()) a.put(i, b.toList())
-        b.clear()
         c.clear()
         check += check1
     }
@@ -256,10 +253,14 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
         if (type == kind && costs <= a) {
             a1 = costs
             b = name
+            k++
         }
-        k++
     }
     return b
+}
+
+fun main() {
+    println(findCheapestStuff(mapOf("" to ("" to 0.0), "a" to ("a" to 1.0)), "a"))
 }
 
 /**
@@ -328,7 +329,7 @@ fun hasAnagrams(words: List<String>): Boolean {
             val e = words[j]
             if (a.length == e.length) for (l in 0..e.length - 1) if (a[l] == e[e.length - 1 - l]) p++ else
                 break
-            if (p == e.length && e != "") return true
+            if (p == e.length && e != "" || a == "" && e == "") return true
             p = 0
         }
     }
@@ -365,19 +366,21 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
     for ((key, value) in friends) {
         var truefalse = false
         val a = value.toMutableSet()
-        while (!truefalse) {
-            truefalse = true
-            val a1 = a
-            for (i in a1) {
-                if (result[i] != null) {
-                    for (name in result[i]!!) if (name !in a && name != key) {
-                        a += name
-                        truefalse = false
-                    }
-                } else result[i] = emptySet()
+        if (a.isNotEmpty()) {
+            while (!truefalse) {
+                truefalse = true
+                val a1 = a
+                for (i in a1) {
+                    if (result[i] != null) {
+                        for (name in result[i]!!) if (name !in a && name != key) {
+                            a += name
+                            truefalse = false
+                        }
+                    } else result[i] = emptySet()
+                }
             }
+            result[key] = a.toSet()
         }
-        result[key] = a.toSet()
     }
     return result
 }
