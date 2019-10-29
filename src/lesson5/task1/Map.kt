@@ -259,10 +259,6 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
     return b
 }
 
-fun main() {
-    println(findCheapestStuff(mapOf("" to ("" to 0.0), "a" to ("a" to 1.0)), "a"))
-}
-
 /**
  * Средняя
  *
@@ -329,7 +325,7 @@ fun hasAnagrams(words: List<String>): Boolean {
             val e = words[j]
             if (a.length == e.length) for (l in 0..e.length - 1) if (a[l] == e[e.length - 1 - l]) p++ else
                 break
-            if (p == e.length && e != "" || a == "" && e == "") return true
+            if (p == e.length && e != "" || (a == "" && e == "")) return true
             p = 0
         }
     }
