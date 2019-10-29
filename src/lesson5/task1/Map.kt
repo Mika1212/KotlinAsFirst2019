@@ -325,7 +325,7 @@ fun hasAnagrams(words: List<String>): Boolean {
             val e = words[j]
             if (a.length == e.length) for (l in 0..e.length - 1) if (a[l] == e[e.length - 1 - l]) p++ else
                 break
-            if (p == e.length && e != "" || (a == "" && e == "")) return true
+            if ((p == e.length && e != "") || (a == "" && e == "")) return true
             p = 0
         }
     }
