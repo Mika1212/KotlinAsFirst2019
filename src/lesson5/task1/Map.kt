@@ -98,18 +98,20 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val b = mutableListOf<String>()
     val c = mutableListOf<String>()
     val check = mutableSetOf<Int>()
+    var check1 = 0
     for (i in 0..5) {
         for ((key, value) in grades) {
             if (i == value) b += key
-            if (((value > 5 || value < 0) && (value in check || c.isEmpty())) && if (i > 0 && value in check) false else true) {
+            if (((value > 5 || value < 0) && (value == check1 || c.isEmpty())) && if (i > 0 && value in check) false else true) {
                 c += key
-                check += value
+                check1 = value
                 if (c.isNotEmpty()) a.put(value, c.toList())
             }
         }
         if (b.isNotEmpty()) a.put(i, b.toList())
         b.clear()
         c.clear()
+        check += check1
     }
     return a
 }
@@ -269,7 +271,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     val a = chars.toSet()
     for (i in 0..word.length - 1) {
-        if (word[i].toLowerCase() !in a || word[i].toUpperCase() !in a) return false
+        if (word[i].toLowerCase() !in a && word[i].toUpperCase() !in a) return false
     }
     return true
 }
@@ -359,15 +361,16 @@ fun hasAnagrams(words: List<String>): Boolean {
 
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
     val result = friends.toMutableMap()
+
     for ((key, value) in friends) {
-        val a = value.toMutableSet()
-        for (friendName in value)
-            if (friends[friendName] != null) {
-                for (name in friends[friendName]!!) {
-                    if (name !in a && name != key) a += name
-                }
-                result[key] = a
-            } else result[friendName] = emptySet()
+        var a = value
+        val a1 = a
+        for (i in a1) {
+            if (result[i] != null) {
+                for (name in result[i]!!) if (name !in a && name != key) a += name
+            } else result[i] = emptySet()
+        }
+        result[key] = a
     }
     return result
 }
