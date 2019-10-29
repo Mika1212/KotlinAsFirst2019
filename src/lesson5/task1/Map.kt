@@ -99,7 +99,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val c = mutableListOf<String>()
     val check = mutableSetOf<Int>()
     var check1 = 0
-    for (i in 0..5) {
+    for (i in 0..10) {
         for ((key, value) in grades) {
             if (i == value) b += key
             if (((value > 5 || value < 0) && (value == check1 || c.isEmpty())) && if (i > 0 && value in check) false else true) {
@@ -247,14 +247,17 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *   ) -> "Мария"
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
-    var a = Double.MAX_VALUE
     var b: String? = null
+    var k = 0
+    var a1 = 0.0
     for ((name, value) in stuff) {
         val (type, costs) = value
-        if (type == kind && costs < a) {
-            a = costs
+        val a = if (k == 0) costs else a1
+        if (type == kind && costs <= a) {
+            a1 = costs
             b = name
         }
+        k++
     }
     return b
 }
@@ -323,11 +326,9 @@ fun hasAnagrams(words: List<String>): Boolean {
         val a = i
         for (j in k..words.size - 1) {
             val e = words[j]
-            if (a.length == e.length) for (l in 0..e.length - 1)
-                if (a[l] in e) p++
-                else
-                    break
-            if (p == e.length) return true
+            if (a.length == e.length) for (l in 0..e.length - 1) if (a[l] == e[e.length - 1 - l]) p++ else
+                break
+            if (p == e.length && e != "") return true
             p = 0
         }
     }
@@ -361,16 +362,22 @@ fun hasAnagrams(words: List<String>): Boolean {
 
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
     val result = friends.toMutableMap()
-
     for ((key, value) in friends) {
-        var a = value
-        val a1 = a
-        for (i in a1) {
-            if (result[i] != null) {
-                for (name in result[i]!!) if (name !in a && name != key) a += name
-            } else result[i] = emptySet()
+        var truefalse = false
+        val a = value.toMutableSet()
+        while (!truefalse) {
+            truefalse = true
+            val a1 = a
+            for (i in a1) {
+                if (result[i] != null) {
+                    for (name in result[i]!!) if (name !in a && name != key) {
+                        a += name
+                        truefalse = false
+                    }
+                } else result[i] = emptySet()
+            }
         }
-        result[key] = a
+        result[key] = a.toSet()
     }
     return result
 }
