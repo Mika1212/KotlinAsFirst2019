@@ -156,7 +156,7 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  */
 fun times(a: List<Int>, b: List<Int>): Int {
     var c = 0
-    for (i in 0..max(a.size, b.size) - 1) c += a[i] * b[i]
+    for (i in 0 until max(a.size, b.size)) c += a[i] * b[i]
     return c
 }
 
@@ -189,7 +189,7 @@ fun polynom(p: List<Int>, x: Int): Int {
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
     var a = 0
-    for (i in 0..list.size - 1) {
+    for (i in 0 until list.size) {
         a += list[i]
         list[i] = a
     }
