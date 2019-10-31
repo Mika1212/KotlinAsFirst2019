@@ -323,7 +323,7 @@ fun hasAnagrams(words: List<String>): Boolean {
         val a = i
         for (j in k..words.size - 1) {
             val e = words[j]
-            if (a.length == e.length) for (l in 0..e.length - 1) if (a[l] == e[e.length - 1 - l]) p++ else
+            if (a.length == e.length) for (l in 0..e.length - 1) if (a[l] in e) p++ else
                 break
             if ((p == e.length && e != "") || (a == "" && e == "")) return true
             p = 0
@@ -359,20 +359,21 @@ fun hasAnagrams(words: List<String>): Boolean {
 
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
     val result = friends.toMutableMap()
-    var b = emptySet<String>()
+    val b = emptySet<String>().toMutableSet()
     for ((key, value) in friends) {
         var truefalse = false
         val a = value.toMutableSet()
         if (a.isNotEmpty()) {
             while (!truefalse) {
                 truefalse = true
-                val a1 = a
+                val a1 = a.toSet()
                 for (i in a1) {
                     if (result[i] != null) {
-                        for (name in result[i]!!) if (name !in a && name != key) {
-                            a += name
-                            truefalse = false
-                        }
+                        for (name in result[i]!!)
+                            if (name !in a && name != key) {
+                                a += name
+                                truefalse = false
+                            }
                     } else b += i
                 }
             }
