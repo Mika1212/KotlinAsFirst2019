@@ -74,9 +74,9 @@ fun main() {
  * входными данными.
  */
 fun dateStrToDigit(str: String): String {
-    val a = str.split(" ")
-    val result = mutableListOf<String>()
     try {
+        val a = str.split(" ")
+        val result = mutableListOf<String>()
         when {
             a[1] == "января" -> {
                 if (a[0] < 0.toString() || a[0] > 31.toString()) return ""
@@ -84,7 +84,7 @@ fun dateStrToDigit(str: String): String {
                 result.add("01")
             }
             a[1] == "февраля" -> {
-                if (daysInMonth(2, a[2].toInt()) != a[0].toInt()) return ""
+                if (daysInMonth(2, a[2].toInt()) < a[0].toInt()) return ""
                 result.add(a[0])
                 result.add("02")
             }
@@ -140,7 +140,7 @@ fun dateStrToDigit(str: String): String {
             }
             else -> return ""
         }
-        if (result[0].toInt() < 10 && result[0][0]!='0') result[0] = 0.toString() + result[0]
+        if (result[0].toInt() < 10 && result[0][0] != '0') result[0] = 0.toString() + result[0]
         if (a[2] > 0.toString()) result.add(a[2]) else return ""
         return result.joinToString(separator = ".")
     } catch (e: IndexOutOfBoundsException) {
@@ -160,24 +160,25 @@ fun dateStrToDigit(str: String): String {
  * входными данными.
  */
 fun dateDigitToStr(digital: String): String {
-    val a = digital.split(".")
-    val namesOfMonths = listOf(
-        "января",
-        "февраля",
-        "марта",
-        "апреля",
-        "мая",
-        "июня",
-        "июля",
-        "августа",
-        "сентября",
-        "октября",
-        "ноября",
-        "декабря"
-    )
-    val result = mutableListOf<String>()
     try {
+        val a = digital.split(".")
+        val namesOfMonths = listOf(
+            "января",
+            "февраля",
+            "марта",
+            "апреля",
+            "мая",
+            "июня",
+            "июля",
+            "августа",
+            "сентября",
+            "октября",
+            "ноября",
+            "декабря"
+        )
+        val result = mutableListOf<String>()
         for (i in 1..12) {
+            if (a[1].toInt() > 12) return ""
             if (a[1].toInt() == i) {
                 if (i == 2) {
                     if (daysInMonth(2, a[2].toInt()) < a[0].toInt()) return ""
@@ -297,14 +298,14 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    var k = 0
-    val set = setOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', ' ', '+')
-    val e = IllegalArgumentException()
-    for (i in expression) if (i !in set) throw e
-    val a = expression.split(" ")
-    for (i in 0 until a.size) if (a[i].length > 1 && (a[i][0] == '+' || a[i][0] == '-')) throw e
-    var result = a[0].toInt()
     try {
+        var k = 0
+        val set = setOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', ' ', '+')
+        val e = IllegalArgumentException()
+        for (i in expression) if (i !in set) throw e
+        val a = expression.split(" ")
+        for (i in 0 until a.size) if (a[i].length > 1 && (a[i][0] == '+' || a[i][0] == '-')) throw e
+        var result = a[0].toInt()
         for (count in a) {
             if (count == "+") result += a[k + 1].toInt()
             if (count == "-") result -= a[k + 1].toInt()
@@ -328,9 +329,9 @@ fun plusMinus(expression: String): Int {
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
 fun firstDuplicateIndex(str: String): Int {
-    val a = str.split(" ")
-    var j = 0
     return try {
+        val a = str.split(" ")
+        var j = 0
         for (i in 0 until a.size) {
             if (a[i].toLowerCase() == a[i + 1].toLowerCase()) break
             j += a[i].length + 1
@@ -352,7 +353,26 @@ fun firstDuplicateIndex(str: String): Int {
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше либо равны нуля.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    try {
+        val a = description.split(";")
+        var maxCost = -1.0
+        var name = ""
+
+        for (itemCosts in a) {
+            val b = itemCosts.trim().split(" ")
+            if (b[1].toDouble() > maxCost) {
+                maxCost = b[1].toDouble()
+                name = b[0]
+            }
+        }
+        return name
+    } catch (e: IndexOutOfBoundsException) {
+        return ""
+    } catch (e: NumberFormatException) {
+        return ""
+    }
+}
 
 /**
  * Сложная
