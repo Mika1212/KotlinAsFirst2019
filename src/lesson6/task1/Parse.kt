@@ -5,7 +5,6 @@ package lesson6.task1
 import lesson2.task2.daysInMonth
 import java.lang.IndexOutOfBoundsException
 import java.lang.NumberFormatException
-import kotlin.math.exp
 
 /**
  * Пример
@@ -275,7 +274,7 @@ fun bestHighJump(jumps: String): Int {
         for (i in jumps) if (i !in set) return -1
         val a = jumps.split(" ").filter(fun(it: String) = it in "0".."9" || it == "+")
         val checklist = mutableListOf<String>()
-        if (a.isNotEmpty()) for (i in 0..a.size - 1) if (a[i] == "+") checklist.add(a[i - 1])
+        if (a.isNotEmpty()) for (i in 0 until a.size) if (a[i] == "+") checklist.add(a[i - 1])
         var a1 = -1
         for (length in checklist)
             if (length.toInt() > a1)
@@ -328,15 +327,10 @@ fun plusMinus(expression: String): Int {
  */
 fun firstDuplicateIndex(str: String): Int {
     val a = str.split(" ")
-    var k = 0
     var j = 0
-    var b = ""
     return try {
         for (i in 0 until a.size) {
-            if (a[i].toLowerCase() == a[i + 1].toLowerCase()) {
-                b = a[i]
-                break
-            }
+            if (a[i].toLowerCase() == a[i + 1].toLowerCase()) break
             j += a[i].length + 1
         }
         j
