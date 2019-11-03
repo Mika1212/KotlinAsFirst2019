@@ -140,7 +140,7 @@ fun dateStrToDigit(str: String): String {
             }
             else -> return ""
         }
-        if (result[0].toInt() < 10) result[0] = 0.toString() + result[0]
+        if (result[0].toInt() < 10 && result[0][0]!='0') result[0] = 0.toString() + result[0]
         if (a[2] > 0.toString()) result.add(a[2]) else return ""
         return result.joinToString(separator = ".")
     } catch (e: IndexOutOfBoundsException) {
@@ -180,7 +180,7 @@ fun dateDigitToStr(digital: String): String {
         for (i in 1..12) {
             if (a[1].toInt() == i) {
                 if (i == 2) {
-                    if (daysInMonth(2, a[2].toInt()) != a[0].toInt()) return ""
+                    if (daysInMonth(2, a[2].toInt()) < a[0].toInt()) return ""
                 } else {
                     if (i < 8 && ((i % 2 == 0 && a[0].toInt() > 30) || (i % 2 == 1 && a[0].toInt() > 31))) return ""
                     if (i > 7 && ((i % 2 == 0 && a[0].toInt() > 31) || (i % 2 == 1 && a[0].toInt() > 30))) return ""
@@ -312,6 +312,8 @@ fun plusMinus(expression: String): Int {
         }
         return result
     } catch (e: IllegalArgumentException) {
+        throw e
+    } catch (e: NumberFormatException) {
         throw e
     }
 }
