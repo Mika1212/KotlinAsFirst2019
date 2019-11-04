@@ -61,7 +61,6 @@ fun main() {
     }
 }
 
-
 /**
  * Средняя
  *
@@ -141,13 +140,12 @@ fun dateStrToDigit(str: String): String {
             else -> return ""
         }
         if (result[0].toInt() < 10 && result[0][0] != '0') result[0] = 0.toString() + result[0]
-        if (a[2] > 0.toString()) result.add(a[2]) else return ""
+        if (a[2] >= 0.toString()) result.add(a[2]) else return ""
         return result.joinToString(separator = ".")
     } catch (e: IndexOutOfBoundsException) {
         return ""
     }
 }
-
 
 /**
  * Средняя
