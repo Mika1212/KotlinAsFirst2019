@@ -2,8 +2,6 @@
 
 package lesson5.task1
 
-import kotlin.math.max
-
 /**
  * Пример
  *
@@ -101,10 +99,10 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     var check1 = 0
     for (i in 0..grades.count()) {
         for ((key, value) in grades) {
-            if (((value == check1 || c.isEmpty())) && if (i > 0 && value in check) false else true) {
+            if (((value == check1 || c.isEmpty())) && !(i > 0 && value in check)) {
                 c += key
                 check1 = value
-                if (c.isNotEmpty()) a.put(value, c.toList())
+                if (c.isNotEmpty()) a[value] = c.toList()
             }
         }
         c.clear()
@@ -270,7 +268,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     val a = chars.toSet()
-    for (i in 0..word.length - 1) {
+    for (i in 0 until word.length) {
         if (word[i].toLowerCase() !in a && word[i].toUpperCase() !in a) return false
     }
     return true
@@ -320,12 +318,11 @@ fun hasAnagrams(words: List<String>): Boolean {
     var p = 0
     for (i in words) {
         k++
-        val a = i
-        for (j in k..words.size - 1) {
+        for (j in k until words.size) {
             val e = words[j]
-            if (a.length == e.length) for (l in 0..e.length - 1) if (a[l] in e) p++ else
+            if (i.length == e.length) for (l in 0 until e.length) if (i[l] in e) p++ else
                 break
-            if ((p == e.length && e != "") || (a == "" && e == "")) return true
+            if ((p == e.length && e != "") || (i == "" && e == "")) return true
             p = 0
         }
     }
@@ -361,18 +358,18 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
     val result = friends.toMutableMap()
     val b = emptySet<String>().toMutableSet()
     for ((key, value) in friends) {
-        var truefalse = false
+        var trueFalse = false
         val a = value.toMutableSet()
         if (a.isNotEmpty()) {
-            while (!truefalse) {
-                truefalse = true
+            while (!trueFalse) {
+                trueFalse = true
                 val a1 = a.toSet()
                 for (i in a1) {
                     if (result[i] != null) {
                         for (name in result[i]!!)
                             if (name !in a && name != key) {
                                 a += name
-                                truefalse = false
+                                trueFalse = false
                             }
                     } else b += i
                 }
@@ -405,7 +402,7 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     val a = mutableMapOf<Int, Int>()
     var j = 0
     for (i in list) {
-        a.put(i, j)
+        a[i] = j
         j++
     }
     j = 0
