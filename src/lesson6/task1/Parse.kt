@@ -297,17 +297,15 @@ fun bestHighJump(jumps: String): Int {
  */
 fun plusMinus(expression: String): Int {
     try {
-        var k = 0
         val set = setOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', ' ', '+')
         val e = IllegalArgumentException()
         for (i in expression) if (i !in set) throw e
         val a = expression.split(" ")
         for (i in 0 until a.size) if (a[i].length > 1 && (a[i][0] == '+' || a[i][0] == '-')) throw e
         var result = a[0].toInt()
-        for (count in a) {
+        for ((k, count) in a.withIndex()) {
             if (count == "+") result += a[k + 1].toInt()
             if (count == "-") result -= a[k + 1].toInt()
-            k++
         }
         return result
     } catch (e: IllegalArgumentException) {
@@ -356,7 +354,6 @@ fun mostExpensive(description: String): String {
         val a = description.split(";")
         var maxCost = -1.0
         var name = ""
-
         for (itemCosts in a) {
             val b = itemCosts.trim().split(" ")
             if (b[1].toDouble() > maxCost) {
@@ -383,7 +380,36 @@ fun mostExpensive(description: String): String {
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    var result = 0
+    val romanMod = listOf(" ", roman, " ").joinToString(separator = "")
+    val set = setOf('I', 'V', 'X', 'C', 'D', 'M', 'L', ' ')
+    for (i in romanMod) if (i !in set) return -1
+    try {
+        for (i in 1 until romanMod.length - 1) {
+            when {
+                romanMod[i] == 'C' && romanMod[i + 1] == 'M' -> result += 900
+                romanMod[i] == 'C' && romanMod[i + 1] == 'D' -> result += 400
+                romanMod[i] == 'X' && romanMod[i + 1] == 'C' -> result += 90
+                romanMod[i] == 'X' && romanMod[i + 1] == 'L' -> result += 40
+                romanMod[i] == 'I' && romanMod[i + 1] == 'X' -> result += 9
+                romanMod[i] == 'I' && romanMod[i + 1] == 'V' -> result += 4
+                romanMod[i] == 'M' && romanMod[i - 1] != 'C' -> result += 1000
+                romanMod[i] == 'D' && romanMod[i + 1] != 'M' && romanMod[i - 1] != 'C' -> result += 500
+                romanMod[i] == 'C' && romanMod[i + 1] != 'D' && romanMod[i + 1] != 'M' && romanMod[i - 1] != 'X' -> result += 100
+                romanMod[i] == 'L' && romanMod[i - 1] != 'X' -> result += 50
+                romanMod[i] == 'X' && romanMod[i + 1] != 'L' && romanMod[i + 1] != 'C' && romanMod[i - 1] != 'I' -> result += 10
+                romanMod[i] == 'V' && romanMod[i - 1] != 'I' -> result += 5
+                romanMod[i] == 'I' && romanMod[i + 1] != 'X' && romanMod[i + 1] != 'V' -> result += 1
+            }
+        }
+        return result
+    } catch (e: IndexOutOfBoundsException) {
+        return -1
+    } catch (e: NumberFormatException) {
+        return -1
+    }
+}
 
 /**
  * Очень сложная
@@ -421,4 +447,58 @@ fun fromRoman(roman: String): Int = TODO()
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    var check = false
+    var kLeft = 0
+    var kRight = 0
+    val e1 = IllegalArgumentException()
+    val e2 = IllegalStateException()
+    val set = setOf('>', '<', '-', '+', ' ', '[', ']')
+    for (u in commands) {
+        if (u !in set) throw e1
+        if (u == '[') kLeft++
+        else
+            if (u == ']') kRight++
+    }
+    if (kLeft != kRight) throw e1
+    var limiter = limit
+    var i = cells / 2
+    val result = mutableListOf<Int>()
+    for (u in 0 until cells) result += 0
+    for ((u, command) in commands.withIndex()) {                                             // Создаю цикл, перебираю все значения
+        var k = 0
+        if (!check) {
+            val j = if (command == '<') -1 else if (command == '>') 1 else 0
+            i += j
+            val count = if (command == '-') -1 else if (command == '+') 1 else 0
+            result[i] += count
+        }
+        if (command == ']') check = false
+        if (command == '[' && result[i] > 0) {                                                     // Проверка на начало цикла
+            check = true
+            while (k != 1) {
+                if (limiter <= 0) break                                                             // его запуск
+                for (m in commands[u+1]..commands[commands.length - 1]) {
+                    val j1 = if (m == '<') -1 else if (m == '>') 1 else 0
+                    i += j1
+                    val count1 = if (m == '-') -1 else if (m == '+') 1 else 0
+                    result[i] += count1
+                    if (m == ']') if (result[i] > 0) {                                              // Проверка на конец цикла
+                        k = 0
+                        break
+                    } else {
+                        k = 1
+                        break
+                    }
+                    limiter -= 1
+                    if (i < 0 || i > cells) throw e2
+                    if (limiter <= 0) break
+                }
+            }
+        }
+        limiter -= 1
+        if (i < 0 || i > cells) throw e2
+        if (limiter <= 0) break
+    }
+    return result
+}

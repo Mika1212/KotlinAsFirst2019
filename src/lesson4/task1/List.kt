@@ -156,7 +156,7 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  */
 fun times(a: List<Int>, b: List<Int>): Int {
     var c = 0
-    for (i in 0 until max(a.size, b.size)) c += a[i] * b[i]
+    for (i in 0 until b.size) c += a[i] * b[i]
     return c
 }
 
@@ -258,18 +258,19 @@ fun convert(n: Int, base: Int): List<Int> {
  */
 
 fun convertToStringHelper(number: Int): String {
-    return if (number < 10) "$number" else {
+    return if (number < 10) "$number"
+    else {
         val a = 'a' + number - 10
         a.toString()
     }
 }
 
 fun convertToString(n: Int, base: Int): String {
-    var result = ""
+    val result = mutableListOf<String>()
     for (i in convert(n, base)) {
-        result += convertToStringHelper(i)
+        result.add(convertToStringHelper(i))
     }
-    return result
+    return result.joinToString(separator = "")
 }
 
 /**
@@ -300,19 +301,9 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * (например, str.toInt(base)), запрещается.
  */
 
-fun decimalFromSrtingHelper(number: Char): Int {
-    var k = 0
-    for (i in '0'..'9') {
-        if (number == i) return k
-        k++
-    }
-    k = 10
-    for (i in 'a'..'z') {
-        if (number == i) return k
-        k++
-    }
-    return 1
-}
+fun decimalFromSrtingHelper(number: Char): Int = if (number - 'a' > -1) number - 'a' + 10
+else
+    number.toString().toInt()
 
 fun decimalFromString(str: String, base: Int): Int {
     val a = mutableListOf<Int>()
@@ -331,7 +322,7 @@ fun decimalFromString(str: String, base: Int): Int {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    var result = ""
+    val result = mutableListOf<String>()
     var k1000 = n / 1000
     var k100 = n % 1000 / 100
     var k10 = n % 100 / 10
@@ -394,7 +385,7 @@ fun roman(n: Int): String {
         result += "I"
         k1 -= 1
     }
-    return result
+    return result.joinToString(separator = "")
 }
 
 /**
