@@ -447,53 +447,122 @@ fun fromRoman(roman: String): Int {
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
+
+fun computeDeviceCellsHelper(
+    result: MutableList<Int>,
+    commands: String,
+    limit: Int,
+    cells: Int,
+    number: Int
+): MutableList<Int>? {
+    var limiter = limit
+    var i = number
+    var tF = false
+    val sender = mutableListOf<Char>()
+    while (!tF) {
+        var kRight = 0
+        var kLeft = 1
+        for ((u, command) in commands.withIndex()) {
+            sender.clear()
+            if (kLeft - kRight == 1) {
+                i += if (command == '>') 1 else if (command == '<') -1 else 0
+                result[i] += if (command == '+') 1 else if (command == '-') -1 else 0
+            }
+            if (command == '[') {
+                var kRight1 = 0
+                var kLeft1 = 0
+                kLeft++
+                if (result[i] != 0) {
+                    for (j in u + 1 until commands.length) {
+                        sender += commands[j]
+                        if (commands[j] == ']') {
+                            kRight1++
+                            if (kLeft1 == kRight1) break
+                        }
+                        if (commands[j] == '[') kLeft1++
+                    }
+                    computeDeviceCellsHelper(result, sender.joinToString(separator = ""), limiter, cells, i)
+                }
+            }
+            if (command == ']') {
+                kRight++
+                if (kLeft == kRight) break
+                else
+                    if (result[i] == 0) {
+                        tF = true
+                        break
+                    }
+            }
+            limiter -= 1
+            if (i < 0 || i > cells || limiter <= 0) return null
+        }
+        if (result[i] == 0) tF = true
+    }
+    return (result + i).toMutableList()
+}
+
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
-    var check = false
     var kLeft = 0
     var kRight = 0
     val e1 = IllegalArgumentException()
     val e2 = IllegalStateException()
+    val sender = mutableListOf<Char>()
     val set = setOf('>', '<', '-', '+', ' ', '[', ']')
     for (u in commands) {
         if (u !in set) throw e1
         if (u == '[') kLeft++
-        else
-            if (u == ']') kRight++
+        if (u == ']') kRight++
     }
     if (kLeft != kRight) throw e1
+    kLeft = 0
+    kRight = 0
     var limiter = limit
     var i = cells / 2
-    val result = mutableListOf<Int>()
-    for (u in 0 until cells) result += 0
+    val result1 = mutableListOf<Int>()
+    for (u in 0 until cells) result1 += 0
+    var result = result1
     for ((u, command) in commands.withIndex()) {                                             // Создаю цикл, перебираю все значения
-        var k = 0
-        if (!check) {
-            val j = if (command == '<') -1 else if (command == '>') 1 else 0
-            i += j
+        if (kLeft == kRight) {
+            val g = if (command == '<') -1 else if (command == '>') 1 else 0
+            i += g
             val count = if (command == '-') -1 else if (command == '+') 1 else 0
             result[i] += count
         }
-        if (command == ']') check = false
-        if (command == '[' && result[i] > 0) {                                                     // Проверка на начало цикла
-            check = true
-            while (k != 1) {
-                if (limiter <= 0) break                                                             // его запуск
-                for (m in commands[u+1]..commands[commands.length - 1]) {
-                    val j1 = if (m == '<') -1 else if (m == '>') 1 else 0
-                    i += j1
-                    val count1 = if (m == '-') -1 else if (m == '+') 1 else 0
-                    result[i] += count1
-                    if (m == ']') if (result[i] > 0) {                                              // Проверка на конец цикла
-                        k = 0
-                        break
-                    } else {
-                        k = 1
-                        break
+        if (command == ']') kRight++
+        if (command == '[') {
+            kLeft++
+            if (result[i] != 0) {
+                var kRight1 = 0
+                var kLeft1 = 1
+                for (j in u + 1 until commands.length) {
+                    sender += commands[j]
+                    if (commands[j] == ']') {
+                        kRight1++
+                        if (kLeft1 == kRight1) break
                     }
-                    limiter -= 1
-                    if (i < 0 || i > cells) throw e2
-                    if (limiter <= 0) break
+                    if (commands[j] == '[') kLeft1++
                 }
+                if (sender.first() != ']') {
+                    if (computeDeviceCellsHelper(
+                            result,
+                            sender.joinToString(separator = ""),
+                            limiter,
+                            cells,
+                            i
+                        ) == null
+                    ) throw e2
+                    else
+                        result =
+                            computeDeviceCellsHelper(
+                                result,
+                                sender.joinToString(separator = ""),
+                                limiter,
+                                cells,
+                                i
+                            )!!.toMutableList()
+                }
+                i = result.last()
+                result.remove(i)
             }
         }
         limiter -= 1
