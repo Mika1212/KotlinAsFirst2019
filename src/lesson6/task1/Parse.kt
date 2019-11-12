@@ -160,6 +160,7 @@ fun dateStrToDigit(str: String): String {
 fun dateDigitToStr(digital: String): String {
     try {
         val a = digital.split(".")
+        if (a.size != 3) return ""
         val namesOfMonths = listOf(
             "января",
             "февраля",
@@ -298,10 +299,9 @@ fun bestHighJump(jumps: String): Int {
 fun plusMinus(expression: String): Int {
     try {
         val set = setOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', ' ', '+')
-        val e = IllegalArgumentException()
-        for (i in expression) if (i !in set) throw e
+        for (i in expression) if (i !in set) throw IllegalArgumentException()
         val a = expression.split(" ")
-        for (i in 0 until a.size) if (a[i].length > 1 && (a[i][0] == '+' || a[i][0] == '-')) throw e
+        for (i in 0 until a.size) if (a[i].length > 1 && (a[i][0] == '+' || a[i][0] == '-') || a[i] == "") throw IllegalArgumentException()
         var result = a[0].toInt()
         for ((k, count) in a.withIndex()) {
             if (count == "+") result += a[k + 1].toInt()
@@ -384,7 +384,7 @@ fun fromRoman(roman: String): Int {
     var result = 0
     val romanMod = listOf(" ", roman, " ").joinToString(separator = "")
     val set = setOf('I', 'V', 'X', 'C', 'D', 'M', 'L', ' ')
-    for (i in romanMod) if (i !in set) return -1
+    for (i in romanMod) if (i !in set || roman.isEmpty()) return -1
     try {
         for (i in 1 until romanMod.length - 1) {
             when {
