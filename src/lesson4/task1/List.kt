@@ -169,10 +169,9 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Значение пустого многочлена равно 0 при любом x.
  */
 fun polynom(p: List<Int>, x: Int): Int {
-    val a = p
     var b = 1
-    return a.fold(0) { previousResult, element ->
-        if (b != 1 || previousResult != 0) b = b * x
+    return p.fold(0) { previousResult, element ->
+        if (b != 1 || previousResult != 0) b *= x
         previousResult + element * b
     }
 }
@@ -301,14 +300,15 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * (например, str.toInt(base)), запрещается.
  */
 
-fun decimalFromSrtingHelper(number: Char): Int = if (number - 'a' > -1) number - 'a' + 10
-else
-    number.toString().toInt()
+fun decimalFromStringHelper(number: Char): Int =
+    if (number - 'a' > -1) number - 'a' + 10
+    else
+        number.toString().toInt()
 
 fun decimalFromString(str: String, base: Int): Int {
     val a = mutableListOf<Int>()
     for (i in str) {
-        a.add(decimalFromSrtingHelper(i))
+        a.add(decimalFromStringHelper(i))
     }
     return decimal(a, base)
 }

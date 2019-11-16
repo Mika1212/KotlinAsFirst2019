@@ -455,6 +455,7 @@ fun computeDeviceCellsHelper(
     cells: Int,
     number: Int
 ): MutableList<Int>? {
+    var result1 = result
     var limiter = limit
     var i = number
     var tF = false
@@ -465,14 +466,14 @@ fun computeDeviceCellsHelper(
         for ((u, command) in commands.withIndex()) {
             sender.clear()
             if (kLeft - kRight == 1) {
-                i += if (command == '>') 1 else if (command == '<') -1 else 0
-                result[i] += if (command == '+') 1 else if (command == '-') -1 else 0
+                if (command == '<') i -= 1 else if (command == '>') i++
+                if (command == '-') result1[i] -= 1 else if (command == '+') result1[i]++
             }
             if (command == '[') {
                 var kRight1 = 0
-                var kLeft1 = 0
+                var kLeft1 = 1
                 kLeft++
-                if (result[i] != 0) {
+                if (result1[i] != 0) {
                     for (j in u + 1 until commands.length) {
                         sender += commands[j]
                         if (commands[j] == ']') {
@@ -481,24 +482,39 @@ fun computeDeviceCellsHelper(
                         }
                         if (commands[j] == '[') kLeft1++
                     }
-                    computeDeviceCellsHelper(result, sender.joinToString(separator = ""), limiter, cells, i)
+                    if (sender.first() != ']') {
+                        if (computeDeviceCellsHelper(
+                                result,
+                                sender.joinToString(separator = ""),
+                                limiter,
+                                cells,
+                                i
+                            ) == null
+                        ) throw IllegalStateException()
+                        else
+                            result1 =
+                                computeDeviceCellsHelper(
+                                    result,
+                                    sender.joinToString(separator = ""),
+                                    limiter,
+                                    cells,
+                                    i
+                                )!!.toMutableList()
+                    }
+                    i = result1.last()
+                    result1.remove(i)
                 }
             }
             if (command == ']') {
                 kRight++
                 if (kLeft == kRight) break
-                else
-                    if (result[i] == 0) {
-                        tF = true
-                        break
-                    }
             }
             limiter -= 1
             if (i < 0 || i > cells || limiter <= 0) return null
         }
-        if (result[i] == 0) tF = true
+        if (result1[i] == 0) tF = true
     }
-    return (result + i).toMutableList()
+    return (result1 + i).toMutableList()
 }
 
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
@@ -509,9 +525,11 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     val sender = mutableListOf<Char>()
     val set = setOf('>', '<', '-', '+', ' ', '[', ']')
     for (u in commands) {
-        if (u !in set) throw e1
-        if (u == '[') kLeft++
-        if (u == ']') kRight++
+        when (u) {
+            !in set -> throw e1
+            '[' -> kLeft++
+            ']' -> kRight++
+        }
     }
     if (kLeft != kRight) throw e1
     kLeft = 0
@@ -523,10 +541,8 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     var result = result1
     for ((u, command) in commands.withIndex()) {                                             // Создаю цикл, перебираю все значения
         if (kLeft == kRight) {
-            val g = if (command == '<') -1 else if (command == '>') 1 else 0
-            i += g
-            val count = if (command == '-') -1 else if (command == '+') 1 else 0
-            result[i] += count
+            if (command == '<') i -= 1 else if (command == '>') i++
+            if (command == '-') result1[i] -= 1 else if (command == '+') result1[i]++
         }
         if (command == ']') kRight++
         if (command == '[') {
@@ -544,7 +560,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                 }
                 if (sender.first() != ']') {
                     if (computeDeviceCellsHelper(
-                            result,
+                            result1,
                             sender.joinToString(separator = ""),
                             limiter,
                             cells,
@@ -554,12 +570,11 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                     else
                         result =
                             computeDeviceCellsHelper(
-                                result,
+                                result1,
                                 sender.joinToString(separator = ""),
                                 limiter,
                                 cells,
-                                i
-                            )!!.toMutableList()
+                                i)!!.toMutableList()
                 }
                 i = result.last()
                 result.remove(i)
@@ -568,6 +583,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
         limiter -= 1
         if (i < 0 || i > cells) throw e2
         if (limiter <= 0) break
+
     }
     return result
 }

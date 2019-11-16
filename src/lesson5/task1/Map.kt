@@ -93,7 +93,6 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val a = mutableMapOf<Int, List<String>>()
-    val b = mutableListOf<String>()
     val c = mutableListOf<String>()
     val check = mutableSetOf<Int>()
     var check1 = 0
@@ -140,9 +139,9 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *   subtractOf(a = mutableMapOf("a" to "z"), mapOf("a" to "z"))
  *     -> a changes to mutableMapOf() aka becomes empty
  */
-fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
+fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
     val c = mutableSetOf<String>()
-    for ((key, value) in a) if (key in b && a[key] == b[key]) c.add(key)
+    for ((key, value) in a) if (value == b[key]) c.add(key)
     for (i in c) a.remove(i)
 }
 
@@ -154,9 +153,9 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
 fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
-    val c = mutableListOf<String>()
+    val c = mutableSetOf<String>()
     for (i in a) if (i in b && i !in c) c.add(i)
-    return c
+    return c.toList()
 }
 
 /**
@@ -177,24 +176,12 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
-    val result = mutableMapOf<String, String>()
-    val c = mutableListOf<String>()
-    val d = if (mapA.count() >= mapB.count()) mapA else mapB
-    val d1 = if (mapA.count() >= mapB.count()) mapB else mapA
-    for ((key, value) in d) {
-        c += value
-        for ((key1, value1) in d1) if (key == key1 && value1 != value) {
-            if (d1 == mapA) c.add(0, value1) else c += value1
-        }
-        result[key] = c.joinToString()
-        c.clear()
+    val mapC = mapA.toMutableMap()
+    for ((key, value) in mapB) {
+        if (key !in mapC) mapC[key] = value
+        if (mapC[key] != value) mapC[key] += ", $value"
     }
-    for ((key, value) in d1) {
-        if (key !in result) c += value
-        if (c.isNotEmpty()) result[key] = c.joinToString()
-        c.clear()
-    }
-    return result
+    return mapC
 }
 
 /**
@@ -208,10 +195,9 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
-    val result = mutableMapOf("" to 0.0)
+    val result = mutableMapOf<String, Double>()
     var b = 0.0
     var j = 0
-    result.clear()
     for ((name, value) in stockPrices) {
         for ((name1, value1) in stockPrices) {
             if (name == name1) {
@@ -243,15 +229,14 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
     var b: String? = null
-    var k = 0
-    var a1 = 0.0
+    val a = stuff.toList()[0]
+    val (a1, a2) = a
+    var (a3, a4) = a2
     for ((name, value) in stuff) {
         val (type, costs) = value
-        val a = if (k == 0) costs else a1
-        if (type == kind && costs <= a) {
-            a1 = costs
+        if (type == kind && costs <= a4) {
+            a4 = costs
             b = name
-            k++
         }
     }
     return b
@@ -287,21 +272,14 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
-    val b = mutableSetOf<String>()
-    val c = mutableSetOf<String>()
-    val result: MutableMap<String, Int> = mutableMapOf()
-    for (i in list) {
-        if (result[i] == null)
-            for (j in list) {
-                c.add(j)
-                if (j == i && j in c) {
-                    result[i] = result.getOrDefault(i, 0) + 1
-                }
-            }
-        if (result[i] == 1) b.add(i)
+    val result = mutableMapOf<String, Int>()
+    for (name in list) {
+        if (name !in result) result[name] = 0
+        if (name in result) result[name] = result[name]!! + 1
     }
-    for (i in b) result.remove(i)
-    return result
+    val result1 = mutableMapOf<String, Int>()
+    for ((name, value) in result) if (value != 1) result1[name] = value
+    return result1
 }
 
 /**
@@ -315,15 +293,14 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  */
 fun hasAnagrams(words: List<String>): Boolean {
     var k = 0
-    var p = 0
     for (i in words) {
+        var p = 0
         k++
         for (j in k until words.size) {
             val e = words[j]
             if (i.length == e.length) for (l in 0 until e.length) if (i[l] in e) p++ else
                 break
             if ((p == e.length && e != "") || (i == "" && e == "")) return true
-            p = 0
         }
     }
     return false
@@ -356,20 +333,20 @@ fun hasAnagrams(words: List<String>): Boolean {
 
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
     val result = friends.toMutableMap()
-    val b = emptySet<String>().toMutableSet()
+    val b = mutableSetOf<String>()
     for ((key, value) in friends) {
-        var trueFalse = false
+        var check = false
         val a = value.toMutableSet()
         if (a.isNotEmpty()) {
-            while (!trueFalse) {
-                trueFalse = true
+            while (!check) {
+                check = true
                 val a1 = a.toSet()
                 for (i in a1) {
                     if (result[i] != null) {
                         for (name in result[i]!!)
                             if (name !in a && name != key) {
                                 a += name
-                                trueFalse = false
+                                check = false
                             }
                     } else b += i
                 }

@@ -3,11 +3,10 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.sqr
 import lesson2.task2.medianOfDoub
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.sqrt
+import java.lang.Math.pow
+import kotlin.math.*
 
 /**
  * Пример
@@ -176,4 +175,3 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
         else -> a2 - a1
     }
 }
-
